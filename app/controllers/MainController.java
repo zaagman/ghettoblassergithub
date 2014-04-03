@@ -14,9 +14,9 @@ public class MainController extends Controller {
         return ok(views.html.questions.render());
     }
 
-    public static Result addQuestionlist(Object questionlist) {
-         System.out.println(questionlist.getClass());
-         return ok(views.html.questions.render());
+    public static Result addQuestionlist(String questionlist) {
+        System.out.println("it gets here");
+         return ok(views.html.midi.render(""));
     }
 
 }

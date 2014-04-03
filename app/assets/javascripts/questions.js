@@ -26,10 +26,8 @@ questionsApp.controller ('QuestionsController', function ($scope) {
         question.answers.splice(question.answers.indexOf(answer), 1);
     };
 
-    $scope.addQuestionList(){
-        if(!scope.questions){
-            var jsonQuestions = angular.toJson($scope.questions);
+    $scope.addQuestionlist = function ($http){
 
-        }
-    }
+        $http.post("/addQuestionlist", $scope.questions).succes(alert("data sent!")).error(alert="error...");
+    };
 });
