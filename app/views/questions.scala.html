@@ -1,0 +1,73 @@
+@main("Midi testpage") {
+<div ng-app="questionsApp">
+    <div id="questionsPane" ng-controller="QuestionsController">
+    <!--<h1>questions</h1>-->
+    <!--<table ng-repeat="question in questions | orderBy:'time'">-->
+        <!--<tr id="question">-->
+            <!--<td>Question <input type="text">{{ question.text }}</input></td>-->
+            <!--<td>Time <input type="text">{{ question.time }}</td>-->
+            <!--<td>Duration <input type="text">{{ question.duration }}</td>-->
+            <!--&lt;!&ndash;<ul>&ndash;&gt;-->
+                <!--&lt;!&ndash;<li class="answer" ng-repeat="answer in question.answers">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<ul class="answerAttributes">&ndash;&gt;-->
+                        <!--&lt;!&ndash;<li>Text <input type="text">{{ answer.text }}</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<li>Note <input type="text">{{ answer.note }}</li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<li><button ng-click="playNote(answer)">play</button></li>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<li><button ng-click="removeAnswer(question, answer)">remove</button></li>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</ul>&ndash;&gt;-->
+                <!--&lt;!&ndash;</li>&ndash;&gt;-->
+                <!--&lt;!&ndash;<li><button ng-click="newAnswer(question);">new answer</button></li>&ndash;&gt;-->
+                <!--&lt;!&ndash;<li><button ng-click="removeQuestion(question)">remove</button></li>&ndash;&gt;-->
+            <!--&lt;!&ndash;</ul>&ndash;&gt;-->
+        <!--</tr>-->
+        <!--<tr>-->
+           <!--<td>-->
+           <!--<table>-->
+               <!--<tr class="answer" ng-repeat="answer in question.answers">-->
+                   <!--<td>Answer <input type="text">{{ answer.text }}</td>-->
+                   <!--<td>Note <input type="text">{{ answer.note }}</td>-->
+                   <!--<td><button ng-click="playNote(answer)">play</button></td>-->
+                   <!--<td><button ng-click="removeAnswer(question)">remove</button></td>-->
+               <!--</tr>-->
+               <!--<tr><td><button ng-click="newAnswer(question);">new answer</button></td></tr>-->
+           <!--</table>-->
+           <!--</td>-->
+        <!--</tr>-->
+        <!--<tr><td><button ng-click="removeQuestion(question)">remove question</button></td></tr>-->
+    <!--</table>-->
+    <!--<button ng-click="newQuestion();">new question</button>-->
+
+
+        <ul ng-repeat="question in questions">
+            <li>Question</li>
+            <li>
+                <div class="test">
+                <ul id="questionAttributes">
+                    <li>Question <input type="text">{{ question.text }}</input></li>
+                    <li>Time <input type="text">{{ question.time }}</input></li>
+                    <li>Duration <input type="text">{{ question.duration }}</input></li>
+                </ul>
+                </div>
+            </li>
+            <li ng-repeat="answer in question.answers">
+                <div class="test">
+                <ul>
+                    <li>Answer <input type="text">{{ answer.text }}</input></li>
+                    <li>Note <input type="text">{{ answer.note }}</input></li>
+                    <li><button ng-click="playNote(answer)">play</button></li>
+                    <li><button ng-click="removeAnswer(question)">remove</button></li>
+                </ul>
+                </div>
+            </li>
+            <li>
+                <button ng-click="newAnswer(question);">new answer</button></li>
+            <li>
+                <button ng-click="removeQuestion(question)">remove question</button>
+            </li>
+        </ul>
+        <button ng-click="newQuestion();">new question</button>
+    </div>
+</div>
+
+
+}
