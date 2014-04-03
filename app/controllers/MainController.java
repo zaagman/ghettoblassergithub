@@ -17,7 +17,6 @@ public class MainController extends Controller {
     }
 
     public static Result questions() {
-        System.out.println("gets Questions");
         return ok(views.html.questions.render());
     }
 

@@ -2,7 +2,6 @@ var questionsApp = angular.module('questionsApp', []);
 
 questionsApp.controller ('QuestionsController', function ($scope, $http) {
     $scope.newQuestion = function () {
-        console.log("creating new question...");
         if (!$scope.questions){
             $scope.questions = [];
         }
@@ -25,8 +24,11 @@ questionsApp.controller ('QuestionsController', function ($scope, $http) {
         question.answers.splice(question.answers.indexOf(answer), 1);
     };
 
-    $scope.addQuestionlist = function () {
-        alert($scope.questions)
+    $scope.addQuestionlist = function() {
         $http.post("addQuestionlist", $scope.questions);
+    };
+
+    $scope.testMidi = function( answer ) {
+        testNote(note);
     };
 });

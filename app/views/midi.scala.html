@@ -1,16 +1,18 @@
 @(message: String)
 
 @main("Midi testpage") {
- <div ng-app="questionsApp">
-<script type='text/javascript' src='@routes.Assets.at("javascripts/midi.min.js")'></script>
-<script type='text/javascript' src='@routes.Assets.at("javascripts/notes.min.js")'></script>
+<!--<script type='text/javascript' src='@routes.Assets.at("javascripts/notes.min.js")'></script>-->
 
 
 <p>
-<button onclick="runOutputTest();">test output!</button>
+<button onclick="runOutputTests();">test output!</button>
 </p>
 <p>
-<button autofocus="true" onclick="runTest();">Test input!</button>
+<button onclick="runInputTest();">Test input!</button>
+</p>
+
+<p>
+    <button onclick="bootMidi()">boot!</button>
 </p>
 
 <p>
@@ -18,10 +20,4 @@
 
     </select>
 </p>
-<h1>Log</h1>
-<pre id="log">
-	</pre>
-
-<input type="text" ng-model="question" /> {{ question }}
- </div>
 }
