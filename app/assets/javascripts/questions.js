@@ -25,4 +25,11 @@ questionsApp.controller ('QuestionsController', function ($scope) {
     $scope.removeAnswer = function (question, answer) {
         question.answers.splice(question.answers.indexOf(answer), 1);
     };
+
+    $scope.addQuestionList(){
+        if(!scope.questions){
+            var jsonQuestions = angular.toJson($scope.questions);
+
+        }
+    }
 });
