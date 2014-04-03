@@ -9,7 +9,7 @@
             <p>
 
                 <ul id="questionAttributes">
-                    <li>Question <input type="text" ng-model="question.text"/></li>
+                    <li>Question <input type="text" ng-model="question.questiontext"/></li>
                     <li>Time <input type="number" min="0" step="1" ng-model="question.time"/></li>
                     <li>Duration <input type="number" min="0" step="1" ng-model="question.duration"/></li>
                 </ul>
@@ -17,7 +17,7 @@
             <div ng-repeat="answer in question.answers">
                 <p>
                 <ul id="answerAttributes">
-                    <li>Answer <input type="text" ng-model="answer.text"/></li>
+                    <li>Answer <input type="text" ng-model="answer.answertext"/></li>
                     <li>Note <input type="number" min="0" max="127" step="1" ng-model="answer.note"/></li>
                     <li><button ng-mouseover="bootMidi()" ng-click="testMidi(answer)">play</button></li>
                     <li><button ng-click="removeAnswer(question)">remove</button></li>

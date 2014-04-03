@@ -1,13 +1,11 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import play.api.libs.json.Json;
-import play.data.DynamicForm;
-import play.data.Form;
+import models.Answer;
+import models.Question;
+import models.Questionlist;
 import play.mvc.Controller;
 import play.mvc.Result;
-
-import java.util.Map;
 
 
 public class MainController extends Controller {
@@ -22,8 +20,27 @@ public class MainController extends Controller {
 
     public static Result addQuestionlist() {
         JsonNode data = request().body().asJson();
-        System.out.println(data.toString());
-        return ok(views.html.midi.render(""));
-    }
+        Questionlist questionlist = new Questionlist();
+        if (data.isArray()){
 
+            for(final JsonNode questionNode : data){
+                Question question = new Question();
+                question.questiontext = questionNode.get("questiontext").asText();
+                question.time = questionNode.get("time").asInt();
+                question.duration = questionNode.get("duration").asInt();
+                if(questionNode.get("answers").isArray()){
+                    for (final JsonNode answerNode : questionNode.get("answers")){
+                        Answer answer = new Answer();
+                        answer.answertext = answerNode.get("answertext").asText();
+                        answer.note = answerNode.get("note").asInt();
+                        question.answers.add(answer);
+                    }
+                }
+                questionlist.questions.add(question);
+            }
+        }
+        System.out.println(questionlist.toString());
+
+        return ok(views.html.questions.render());
+    }
 }
