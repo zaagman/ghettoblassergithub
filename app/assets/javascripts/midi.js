@@ -15,14 +15,14 @@ function runInputTest() {
 }
 
 function runOutputTests() {
-    if (midi != null){
+    if (midi){
         toConsole("output test running...");
         testNote(50);
     }
 }
 
 function bootMidi() {
-    if (!!midi){
+    if (!midi){
         toConsole("Starting up MIDI...");
         navigator.requestMIDIAccess().then(success, failure);
     }
@@ -69,7 +69,15 @@ function loadOutputs() {
 
     if (outputs.length) {
         output = outputs[0];
-        output.send([0xb0, 0x00, 0x7f]); // If the first device is a Novation Launchpad, this will light it up!
+
+//        Part that searches for the iac driver. If found output will be iac driver.
+        for (var i = 0; i < outputs.length; i++) {
+            if (outputs[i].name.toLowerCase().indexOf("iac") >= 0){
+                output = outputs[i];
+                toConsole("Hooked up " + output.name);
+            }
+        }
+//        output.send([0xb0, 0x00, 0x7f]); // If the first device is a Novation Launchpad, this will light it up!
     }
 
 }
