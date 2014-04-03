@@ -41,19 +41,19 @@
         <ul ng-repeat="question in questions">
             <li>Question</li>
             <li>
-                <div class="test">
+                <div id="divtest">
                 <ul id="questionAttributes">
                     <li>Question <input type="text">{{ question.text }}</input></li>
-                    <li>Time <input type="text">{{ question.time }}</input></li>
-                    <li>Duration <input type="text">{{ question.duration }}</input></li>
+                    <li>Time <input type="number" min="0" step="1">{{ question.time }}</input></li>
+                    <li>Duration <input type="number" min="0" step="1">{{ question.duration }}</input></li>
                 </ul>
                 </div>
             </li>
             <li ng-repeat="answer in question.answers">
-                <div class="test">
+                <div id="divtest">
                 <ul>
                     <li>Answer <input type="text">{{ answer.text }}</input></li>
-                    <li>Note <input type="text">{{ answer.note }}</input></li>
+                    <li>Note <input type="number" min="0" max="127" step="1">{{ answer.note }}</input></li>
                     <li><button ng-click="playNote(answer)">play</button></li>
                     <li><button ng-click="removeAnswer(question)">remove</button></li>
                 </ul>
