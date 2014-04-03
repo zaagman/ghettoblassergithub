@@ -3,7 +3,9 @@ package models;
 import play.db.ebean.Model;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.ArrayList;
+
+import static javax.persistence.CascadeType.PERSIST;
 
 /**
  * Created by zaagman on 03/04/14.
@@ -12,18 +14,21 @@ import java.util.List;
 public class Questionlist extends Model {
 
     @Id
+    @GeneratedValue
     public long id;
     public String user;
-    public List<Question> questions;
+    @OneToMany (cascade = PERSIST)
+    public ArrayList<Question> questions = new ArrayList<Question>();
 
     public String toString () {
         String result = new String();
         for (Question question : questions){
-            result = "question: " + question.questiontext + " time: " + question.time + " duration: " + question.duration + "\n";
-            for (Answer answer : question.answers){
-                result = result + "answer: " + answer.answertext + " note: " + answer.note + "\n";
-            }
+            result = result + "question: " + question;
         }
         return result;
     }
+
+    public static Finder<Long,Questionlist> find = new Finder(
+            Long.class, Questionlist.class
+    );
 }

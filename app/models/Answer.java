@@ -11,6 +11,7 @@ import play.db.ebean.*;
 public class Answer extends Model {
 
     @Id
+    @GeneratedValue
     public long id;
     public String answertext;
     public int note;
@@ -18,4 +19,9 @@ public class Answer extends Model {
     public static Finder<Long,Answer> find = new Finder(
             Long.class, Answer.class
     );
+
+    public String toString () {
+
+            return "answer: " + answertext + " note: " + note + "\n";
+    }
 }

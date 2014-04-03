@@ -7,6 +7,8 @@ import models.Questionlist;
 import play.mvc.Controller;
 import play.mvc.Result;
 
+import java.util.ArrayList;
+
 
 public class MainController extends Controller {
     
@@ -20,6 +22,14 @@ public class MainController extends Controller {
 
     public static Result addQuestionlist() {
         JsonNode data = request().body().asJson();
+        Questionlist questionlist = createQuestionlist(data);
+        System.out.println(questionlist.toString());
+
+
+        return ok(views.html.questions.render());
+    }
+
+    private static Questionlist createQuestionlist(JsonNode data) {
         Questionlist questionlist = new Questionlist();
         if (data.isArray()){
 
@@ -39,8 +49,7 @@ public class MainController extends Controller {
                 questionlist.questions.add(question);
             }
         }
-        System.out.println(questionlist.toString());
 
-        return ok(views.html.questions.render());
+        return questionlist;
     }
 }
