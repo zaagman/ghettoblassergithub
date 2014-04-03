@@ -19,7 +19,7 @@
                 <ul id="answerAttributes">
                     <li>Answer <input type="text" ng-model="answer.text"/></li>
                     <li>Note <input type="number" min="0" max="127" step="1" ng-model="answer.note"/></li>
-                    <li><button ng-click="testMidi(answer)">play</button></li>
+                    <li><button ng-mouseover="bootMidi()" ng-click="testMidi(answer)">play</button></li>
                     <li><button ng-click="removeAnswer(question)">remove</button></li>
               </ul>
                 </p>

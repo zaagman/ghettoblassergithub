@@ -29,6 +29,11 @@ questionsApp.controller ('QuestionsController', function ($scope, $http) {
     };
 
     $scope.testMidi = function( answer ) {
-        testNote(note);
+        testNote(answer);
+    };
+
+    $scope.bootMidi = function () {
+        toConsole("booting midi from questions...");
+        bootMidi();
     };
 });

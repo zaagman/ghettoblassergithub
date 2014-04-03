@@ -22,8 +22,10 @@ function runOutputTests() {
 }
 
 function bootMidi() {
-    toConsole("Starting up MIDI...");
-    navigator.requestMIDIAccess().then(success, failure);
+    if (!!midi){
+        toConsole("Starting up MIDI...");
+        navigator.requestMIDIAccess().then(success, failure);
+    }
 }
 
 function success(midiAccess) {
