@@ -1,17 +1,31 @@
 package controllers;
 
+import actors.OperatorActor;
+import actors.SystemActor;
+import akka.actor.ActorRef;
+import akka.actor.Cancellable;
+import akka.actor.Props;
+import play.libs.Akka;
 import com.fasterxml.jackson.databind.JsonNode;
-import models.Answer;
-import models.Question;
 import models.Questionlist;
+import play.libs.F;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.WebSocket;
+import scala.concurrent.duration.Duration;
 
 import java.util.ArrayList;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class MainController extends Controller {
-    
+
+
+    static ActorRef systemActor = Akka.system().actorOf(new Props(SystemActor.class));
+    ArrayList<ActorRef> operatorActor = new ArrayList<ActorRef>();
+    ArrayList<ActorRef> guestActor = new ArrayList<ActorRef>();
+
+
     public static Result index() {
         return ok(views.html.index.render("Hello from Java"));
     }
@@ -22,34 +36,38 @@ public class MainController extends Controller {
 
     public static Result addQuestionlist() {
         JsonNode data = request().body().asJson();
-        Questionlist questionlist = createQuestionlist(data);
-        System.out.println(questionlist.toString());
+        Questionlist questionlist = Questionlist.newQuestionlistFromJson(data);
 
+
+        systemActor.tell(questionlist, null);
+
+        System.out.println(questionlist.toJson().toString());
 
         return ok(views.html.questions.render());
     }
 
-    private static Questionlist createQuestionlist(JsonNode data) {
-        Questionlist questionlist = new Questionlist();
-        if (data.isArray()){
+    public static WebSocket<String> operatorWs() {
+        return new WebSocket<String>() {
+            ActorRef operatorActor = Akka.system().actorOf(new Props(OperatorActor.class));
+            public void onReady(WebSocket.In<String> in, WebSocket.Out<String> out) {
+                final Cancellable cancellable = Akka.system().scheduler().schedule(Duration.create(1, SECONDS),
+                        Duration.create(1, SECONDS),
+                        operatorActor,
+                        new OperatorActor.NewOperatorWs(in, out),
+                        Akka.system().dispatcher(),
+                        systemActor
+                );
 
-            for(final JsonNode questionNode : data){
-                Question question = new Question();
-                question.questiontext = questionNode.get("questiontext").asText();
-                question.time = questionNode.get("time").asInt();
-                question.duration = questionNode.get("duration").asInt();
-                if(questionNode.get("answers").isArray()){
-                    for (final JsonNode answerNode : questionNode.get("answers")){
-                        Answer answer = new Answer();
-                        answer.answertext = answerNode.get("answertext").asText();
-                        answer.note = answerNode.get("note").asInt();
-                        question.answers.add(answer);
+
+
+                in.onClose(new F.Callback0() {
+                    @Override
+                    public void invoke() throws Throwable {
+                        cancellable.cancel();
                     }
-                }
-                questionlist.questions.add(question);
+                });
             }
-        }
-
-        return questionlist;
+        };
     }
+
 }

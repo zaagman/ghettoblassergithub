@@ -7,6 +7,7 @@ create table answer (
   id                        bigint not null,
   answertext                varchar(255),
   note                      integer,
+  reaction_counter          integer,
   constraint pk_answer primary key (id))
 ;
 

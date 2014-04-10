@@ -36,4 +36,6 @@ questionsApp.controller ('QuestionsController', function ($scope, $http) {
     $scope.bootMidi = function () {
         bootMidi();
     };
+
+    $scope.questions = [{"questiontext":"Testquestion 1","time":10,"duration":60,"answers":[{"answertext":"Antwoord 1","note":1},{"answertext":"Antwoord 2","note":2}]},{"questiontext":"Vraag 2","time":20,"duration":60,"answers":[{"answertext":"Antwoord 1","note":3},{"answertext":"Antwoord 2","note":4}]}];
 });
