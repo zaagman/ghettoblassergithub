@@ -1,25 +1,21 @@
 package actors;
 
 import akka.actor.ActorRef;
-import akka.actor.Props;
-import play.libs.Akka;
 import akka.actor.UntypedActor;
 import play.mvc.WebSocket;
-import actors.SystemActor.*;
+import actors.LiveVoteActor.*;
 
 /**
  * Created by zaagman on 09/04/14.
  */
 public class PerformerActor extends UntypedActor {
 
-    private ActorRef systemActor;
 
 
     @Override
     public void onReceive(Object message) throws Exception {
         if (message instanceof NewOperatorWs){
-            systemActor = getSender();
-            systemActor.tell(new SystemActor.NewOperatorActor(), this.getSelf());
+            LiveVoteActor.instance.tell(new AddPerformer(0), this.getSelf());
         }
 
         if (message instanceof SendResult){

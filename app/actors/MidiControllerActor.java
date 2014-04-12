@@ -10,9 +10,6 @@ import play.libs.Akka;
  */
 public class MidicontrollerActor extends UntypedActor {
 
-
-    ActorRef midicontrollerActor = Akka.system().actorOf(new Props(MidicontrollerActor.class));
-
     @Override
     public void onReceive(Object message) throws Exception {
 
