@@ -1,6 +1,6 @@
 package controllers;
 
-import actors.OperatorActor;
+import actors.PerformerActor;
 import actors.SystemActor;
 import akka.actor.ActorRef;
 import akka.actor.Cancellable;
@@ -14,16 +14,14 @@ import play.mvc.Result;
 import play.mvc.WebSocket;
 import scala.concurrent.duration.Duration;
 
-import java.util.ArrayList;
-
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class MainController extends Controller {
 
 
     static ActorRef systemActor = Akka.system().actorOf(new Props(SystemActor.class));
-    ArrayList<ActorRef> operatorActor = new ArrayList<ActorRef>();
-    ArrayList<ActorRef> guestActor = new ArrayList<ActorRef>();
+//    ArrayList<ActorRef> operatorActors = new ArrayList<ActorRef>();
+//    ArrayList<ActorRef> guestActors = new ArrayList<ActorRef>();
 
 
     public static Result index() {
@@ -48,12 +46,12 @@ public class MainController extends Controller {
 
     public static WebSocket<String> operatorWs() {
         return new WebSocket<String>() {
-            ActorRef operatorActor = Akka.system().actorOf(new Props(OperatorActor.class));
+            ActorRef operatorActor = Akka.system().actorOf(new Props(PerformerActor.class));
             public void onReady(WebSocket.In<String> in, WebSocket.Out<String> out) {
                 final Cancellable cancellable = Akka.system().scheduler().schedule(Duration.create(1, SECONDS),
                         Duration.create(1, SECONDS),
                         operatorActor,
-                        new OperatorActor.NewOperatorWs(in, out),
+                        new PerformerActor.NewOperatorWs(in, out),
                         Akka.system().dispatcher(),
                         systemActor
                 );

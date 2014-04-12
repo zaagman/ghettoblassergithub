@@ -14,3 +14,6 @@ GET     /webjars/*file              controllers.WebJarAssets.at(file)
 GET     /midi                       controllers.MidiController.midi()
 GET     /questions                  controllers.MainController.questions()
 POST    /addQuestionlist            controllers.MainController.addQuestionlist()
+
+GET     /participant                controllers.ParticipantController.participant()
+GET     /participantWs              controllers.ParticipantController.ws()

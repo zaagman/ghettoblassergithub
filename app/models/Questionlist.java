@@ -51,7 +51,6 @@ public class Questionlist extends Model {
     public static Questionlist newQuestionlistFromJson(JsonNode data) {
         Questionlist questionlist = new Questionlist();
         if (data.isArray()){
-
             for(final JsonNode questionNode : data){
                 Question question = new Question();
                 question.questiontext = questionNode.get("questiontext").asText();

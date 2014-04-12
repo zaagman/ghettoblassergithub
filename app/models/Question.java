@@ -62,12 +62,12 @@ public class Question extends Model {
         for (Answer answer : answers){
             if (reaction.equals(answer)){
                 currentAnswer = answer;
-                answer.addReaction();
             }
         }
 
 //      Check if reaction is in answers at all
         if (currentAnswer != null) {
+            currentAnswer.addReaction();
 //            if there is a previous result, compare its number of reactions to the currentAnswer given and set the highest one as result
             if (this.hasResult()){
                 if (currentAnswer.numberOfReactions() > result.numberOfReactions()){

@@ -13,23 +13,23 @@ import scala.concurrent.duration.Duration;
 public class Scheduler {
 
 
-    private ActorRef adminActor;
+    private ActorRef systemActor;
 
     public Scheduler(ActorRef actorRef){
-        this.adminActor = actorRef;
+        this.systemActor = actorRef;
     }
     public boolean scheduleQuestionlist (Questionlist questionlist){
 
         for (Question question : questionlist.questions) {
             Akka.system().scheduler().scheduleOnce(
                     Duration.create(question.time, "seconds"),
-                    adminActor,
+                    systemActor,
                     new AskQuestion(question),
                     Akka.system().dispatcher(),
                     null);
             Akka.system().scheduler().scheduleOnce(
                     Duration.create(question.time + question.duration, "seconds"),
-                    adminActor,
+                    systemActor,
                     new SendResult(question),
                     Akka.system().dispatcher(),
                     null);

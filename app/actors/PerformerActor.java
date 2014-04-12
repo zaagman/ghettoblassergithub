@@ -10,7 +10,7 @@ import actors.SystemActor.*;
 /**
  * Created by zaagman on 09/04/14.
  */
-public class OperatorActor extends UntypedActor {
+public class PerformerActor extends UntypedActor {
 
     private ActorRef systemActor;
 
