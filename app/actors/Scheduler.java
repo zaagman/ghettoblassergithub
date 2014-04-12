@@ -4,7 +4,7 @@ import models.Question;
 import models.Questionlist;
 import play.libs.Akka;
 import akka.actor.ActorRef;
-import actors.SystemActor.*;
+import actors.LiveVoteActor.*;
 import scala.concurrent.duration.Duration;
 
 /**
@@ -13,23 +13,23 @@ import scala.concurrent.duration.Duration;
 public class Scheduler {
 
 
-    private ActorRef systemActor;
+    private ActorRef livevoteActor;
 
     public Scheduler(ActorRef actorRef){
-        this.systemActor = actorRef;
+        this.livevoteActor = actorRef;
     }
     public boolean scheduleQuestionlist (Questionlist questionlist){
 
         for (Question question : questionlist.questions) {
             Akka.system().scheduler().scheduleOnce(
                     Duration.create(question.time, "seconds"),
-                    systemActor,
+                    livevoteActor,
                     new AskQuestion(question),
                     Akka.system().dispatcher(),
                     null);
             Akka.system().scheduler().scheduleOnce(
                     Duration.create(question.time + question.duration, "seconds"),
-                    systemActor,
+                    livevoteActor,
                     new SendResult(question),
                     Akka.system().dispatcher(),
                     null);

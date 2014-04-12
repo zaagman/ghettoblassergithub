@@ -1,6 +1,16 @@
-@main("Hello") {
+@import play.mvc.Http.Context.Implicit._
 
+@main("Welcome") {
+
+
+    <script>
+        var wsRoute = "@routes.ParticipantController.ws.webSocketURL(request)";
+    </script>
     <script type='text/javascript' src='@routes.Assets.at("javascripts/participant.min.js")'></script>
+
+
+
+
     <p>
         Hello participant!!
     </p>

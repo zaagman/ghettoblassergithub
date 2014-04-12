@@ -1,8 +1,8 @@
 test = function () {
-alert("test");
-var ws = new WebSocket("@routes.ParticipantController.ws()");
-ws.onMessage = function (message) {
-    alert(message);
-};
+//    var vs = new WebSocket("@routes.ParticipantController.ws().webSocketURL(request)");
+    var ws = new WebSocket(wsRoute);
+    ws.onmessage = function (message) {
+        console.log(message + "\n");
+    };
 }
 

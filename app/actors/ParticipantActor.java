@@ -23,17 +23,17 @@ public class ParticipantActor extends UntypedActor {
 //            getSender().tell(new ParticipantActor.StockUpdate(), getSelf());
 
         System.out.println("creating actor...");
+        System.out.println(LiveVoteActor.instance);
         LiveVoteActor.instance.tell(new LiveVoteActor.AddParticipant(id), getSelf());
     }
 
     @Override
     public void onReceive(Object message) throws Exception {
 
-        if (message instanceof StockUpdate){
-            ObjectNode stockUpdateMessage = Json.newObject();
-            stockUpdateMessage.put("type", "stockupdate");
-            out.write(stockUpdateMessage);
-
+        if (message instanceof LiveVoteActor.AskQuestion){
+            LiveVoteActor.AskQuestion askQuestion = (LiveVoteActor.AskQuestion)message;
+            out.write(askQuestion.question.toJson());
+            System.out.println("Wrote question to Participant... " + out);
         }
 
     }
