@@ -5,6 +5,7 @@ import actors.ParticipantActor;
 import akka.actor.ActorRef;
 import akka.actor.Props;
 import com.fasterxml.jackson.databind.JsonNode;
+import models.Answer;
 import play.libs.Akka;
 import play.libs.F;
 import play.mvc.Controller;
@@ -32,6 +33,12 @@ public class ParticipantController extends Controller {
                     @Override
                     public void invoke(JsonNode jsonNode) throws Throwable {
                         System.out.println("Message recieved: " + jsonNode.toString());
+                        if (jsonNode.has("answertext")){
+                            Answer answer = new Answer();
+                            answer.answertext = jsonNode.get("answertext").asText();
+                            answer.note = jsonNode.get("note").asInt();
+                            participantActor.tell(new ParticipantActor.ReceiveReaction(answer), null);
+                        }
                     }
                 });
 

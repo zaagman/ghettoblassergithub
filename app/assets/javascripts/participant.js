@@ -27,8 +27,8 @@ questionsApp.controller ('ParticipantController', function ($scope, $http) {
 
     $scope.sendReaction = function (answer){
         ws.send(angular.toJson(answer));
-        console.log ("sent " + answer);
-    };
+        console.log ("reaction sent: " + answer);
+    }
 
     $scope.message = "testmessage";
 });

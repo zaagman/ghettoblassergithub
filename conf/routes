@@ -17,3 +17,7 @@ POST    /addQuestionlist            controllers.MainController.addQuestionlist()
 
 GET     /participant                controllers.ParticipantController.participant()
 GET     /participantWs              controllers.ParticipantController.ws()
+
+
+GET     /midicontroller             controllers.MidicontrollerController.midicontroller()
+GET     /midicontrollerWs           controllers.MidicontrollerController.ws()

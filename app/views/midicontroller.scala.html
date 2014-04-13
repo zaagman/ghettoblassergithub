@@ -1,0 +1,29 @@
+@import play.mvc.Http.Context.Implicit._
+
+@main("Midicontroller Testpage"){<!--test-->} {
+
+
+<div ng-app="midicontrollerApp">
+    <div id="midicontrollerPane" ng-controller="MidicontrollerController">
+
+
+        <script>
+            var wsRoute = "@routes.MidicontrollerController.ws.webSocketURL(request)";
+        </script>
+        <script type='text/javascript' src='@routes.Assets.at("javascripts/midicontroller.min.js")'></script>
+
+        <!--</p>-->
+        <p>
+            Welcome Midicontroller!
+        </p>
+
+
+
+
+        <p>
+            <button ng-click="test()">test IAC!</button>
+        </p>
+
+    </div>
+</div>
+}
