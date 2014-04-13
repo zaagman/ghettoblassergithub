@@ -31,6 +31,7 @@ public class ParticipantController extends Controller {
                 in.onMessage(new F.Callback<JsonNode>() {
                     @Override
                     public void invoke(JsonNode jsonNode) throws Throwable {
+                        System.out.println("Message recieved: " + jsonNode.toString());
                     }
                 });
 

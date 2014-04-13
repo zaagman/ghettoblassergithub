@@ -13,19 +13,21 @@ questionsApp.controller ('ParticipantController', function ($scope, $http) {
 
     var ws = new WebSocket(wsRoute);
     ws.onmessage = function (message) {
-        $scope.message = angular.fromJson(message);
+        $scope.message = angular.fromJson(message.data);
 
-        alert($scope.message.data.question);
+        if ($scope.message.question){
 
-        if ($scope.message.data.question){
-            $scope.question = message.data.question;
-            alert("question recieved");
         }
 
 
 
         $scope.$apply();
         console.log(message + "\n");
+    };
+
+    $scope.sendReaction = function (answer){
+        ws.send(angular.toJson(answer));
+        console.log ("sent " + answer);
     };
 
     $scope.message = "testmessage";

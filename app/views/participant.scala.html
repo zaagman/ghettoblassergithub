@@ -12,49 +12,25 @@
         </script>
         <script type='text/javascript' src='@routes.Assets.at("javascripts/participant.min.js")'></script>
 
-        <p>
-            message:
-            {{message}}
-        </p><p>
-            data:
-            <!--{{message.data}}-->
+        <!--<p>-->
+            <!--message:-->
+            <!--{{message}}-->
+        <!--</p><p>-->
+            <!--data:-->
+            <!--&lt;!&ndash;{{message.data}}&ndash;&gt;-->
 
-        </p><p>
-            data.question:
-            <!--{{message.data.question}}-->
-        </p>
+        <!--</p><p>-->
+            <!--data.question:-->
+            <!--&lt;!&ndash;{{message.data.question}}&ndash;&gt;-->
+        <!--</p>-->
         <p>
             Hello participant!!
         </p>
 
-        <h1>{{question.questiontext}}</h1>
+        <h1>{{message.question.questiontext}}</h1>
         <ul>
-            <li ng-repeat="answer in question.answers">{{answer.answertext}}</li>
+            <li ng-repeat="answer in message.question.answers"><a ng-click="sendReaction(answer)">{{answer.answertext}}</a></li>
         </ul>
-
-
-
-        <div id="onQuestion">
-            <table>
-                <tr>
-                    <td id="countdowncell">
-                        <div id="countdown">
-                            <h1 id="counter"></h1>
-                        </div>
-                    </td>
-                    <td id="questioncell">
-                        <div id="questionpane">
-                            <h2 id="title"></h2>
-                            <p id="question"></p>
-                            <ul id="songs"></ul>
-                        </div>
-                        <div id="votepane">
-                            <p id="vote"></p>
-                        </div>
-                    </td>
-                </tr>
-            </table>
-        </div>
 
 
         <p>
