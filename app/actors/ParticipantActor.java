@@ -25,7 +25,6 @@ public class ParticipantActor extends UntypedActor {
         if (message instanceof LiveVoteActor.AskQuestion){
             LiveVoteActor.AskQuestion askQuestion = (LiveVoteActor.AskQuestion)message;
             out.write(askQuestion.question.toJson());
-            System.out.println("Wrote question to Participant... " + out);
         }
 
     }

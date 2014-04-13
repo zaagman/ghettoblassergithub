@@ -61,8 +61,6 @@ public class LiveVoteActor extends UntypedActor {
         }
         if (message instanceof AskQuestion) {
             System.out.println("Asking question...");
-//            System.out.println(((AskQuestion) message).question);
-//            Send question to operators
             for (ActorRef performer : performerMap.values()){
                 performer.tell(message, this.getSelf());
             }
