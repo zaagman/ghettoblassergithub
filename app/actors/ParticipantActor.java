@@ -15,15 +15,7 @@ public class ParticipantActor extends UntypedActor {
 
     public ParticipantActor(WebSocket.Out<JsonNode> out, Integer id) {
         this.out = out;
-
-        ObjectNode stockUpdateMessage = Json.newObject();
-        stockUpdateMessage.put("type", "stockupdate");
-        out.write(stockUpdateMessage);
-
-//            getSender().tell(new ParticipantActor.StockUpdate(), getSelf());
-
         System.out.println("creating actor...");
-        System.out.println(LiveVoteActor.instance);
         LiveVoteActor.instance.tell(new LiveVoteActor.AddParticipant(id), getSelf());
     }
 
@@ -35,10 +27,6 @@ public class ParticipantActor extends UntypedActor {
             out.write(askQuestion.question.toJson());
             System.out.println("Wrote question to Participant... " + out);
         }
-
-    }
-
-    public static class StockUpdate {
 
     }
 }

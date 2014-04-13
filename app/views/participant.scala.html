@@ -1,21 +1,59 @@
 @import play.mvc.Http.Context.Implicit._
 
-@main("Welcome") {
+@main("Welcome"){<!--test-->} {
 
 
-    <script>
-        var wsRoute = "@routes.ParticipantController.ws.webSocketURL(request)";
-    </script>
-    <script type='text/javascript' src='@routes.Assets.at("javascripts/participant.min.js")'></script>
+<div ng-app="participantApp">
+    <div id="participantPane" ng-controller="ParticipantController">
+
+
+        <script>
+            var wsRoute = "@routes.ParticipantController.ws.webSocketURL(request)";
+        </script>
+        <script type='text/javascript' src='@routes.Assets.at("javascripts/participant.min.js")'></script>
+
+        <p>
+            message:
+            {{message}}
+        </p>
+        <p>
+            Hello participant!!
+        </p>
+
+        <h1>{{question.questiontext}}</h1>
+        <ul>
+            <li ng-repeat="answer in question.answers">{{answer.answertext}}</li>
+        </ul>
 
 
 
+        <div id="onQuestion">
+            <table>
+                <tr>
+                    <td id="countdowncell">
+                        <div id="countdown">
+                            <h1 id="counter"></h1>
+                        </div>
+                    </td>
+                    <td id="questioncell">
+                        <div id="questionpane">
+                            <h2 id="title"></h2>
+                            <p id="question"></p>
+                            <ul id="songs"></ul>
+                        </div>
+                        <div id="votepane">
+                            <p id="vote"></p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
 
-    <p>
-        Hello participant!!
-    </p>
 
-    <p>
-        <button onclick="test()">test!</button>
-    </p>
+        <p>
+            <button ng-click="test()">test!</button>
+        </p>
+
+    </div>
+</div>
 }

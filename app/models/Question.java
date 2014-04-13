@@ -88,31 +88,25 @@ public class Question extends Model {
 
     public JsonNode toJson () {
         JsonNodeFactory factory = JsonNodeFactory.instance;
-        ArrayNode jsonQuestion = new ArrayNode(factory);
+        ObjectNode jsonQuestion = new ObjectNode(factory);
 
-        ObjectNode jsonQuestiontext = new ObjectNode(factory);
-        ObjectNode jsonTime = new ObjectNode(factory);
-        ObjectNode jsonDuration = new ObjectNode(factory);
+        ObjectNode jsonQuestionAttributes = new ObjectNode(factory);
 
-        jsonQuestiontext.put("questiontext", questiontext);
-        jsonTime.put("time", time);
-        jsonDuration.put("duration", duration);
+
+        jsonQuestionAttributes.put("questiontext", questiontext);
+        jsonQuestionAttributes.put("time", time);
+        jsonQuestionAttributes.put("duration", duration);
         ArrayNode jsonAnswers = new ArrayNode(factory);
         for (Answer answer : answers){
             jsonAnswers.add(answer.asJson());
         }
 
-        jsonQuestion.add(jsonQuestiontext);
-        jsonQuestion.add(jsonTime);
-        jsonQuestion.add(jsonDuration);
-        jsonQuestion.add(jsonAnswers);
+        jsonQuestionAttributes.put("answers", jsonAnswers);
 
         if (this.hasResult()){
-            ObjectNode jsonResult = new ObjectNode(factory);
-            jsonResult.put("result", result.asJson());
-            jsonQuestion.add(jsonResult);
+            jsonQuestionAttributes.put("result", result.asJson());
         }
-
+        jsonQuestion.put("question", jsonQuestionAttributes);
         return jsonQuestion;
     }
 }
