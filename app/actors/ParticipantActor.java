@@ -27,12 +27,14 @@ public class ParticipantActor extends UntypedActor {
             AskQuestion askQuestion = (AskQuestion)message;
             currentQuestion = askQuestion.question;
             out.write(askQuestion.question.toJson());
-        }
-        if (message instanceof Reaction){
+        } else if (message instanceof Reaction){
             Reaction reaction = (Reaction) message;
             currentQuestion.addReaction(reaction.reaction);
             System.out.println("Reaction added...");
             LiveVoteActor.instance.tell(message, getSelf());
+        } else if (message instanceof SetOut) {
+            SetOut setOut = (SetOut) message;
+            out = setOut.out;
         }
 
     }
