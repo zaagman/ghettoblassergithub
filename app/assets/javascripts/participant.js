@@ -15,10 +15,7 @@ participantApp.controller ('ParticipantController', function ($scope, $http, $co
         }
 
         if ($scope.message.participantID){
-            alert("ID in cookie: " + participantID);
-            if (!participantID) {
             $cookieStore.put('participantID', $scope.message.participantID);
-            }
         }
 
 
