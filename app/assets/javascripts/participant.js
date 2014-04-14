@@ -1,28 +1,30 @@
-var participantApp = angular.module('participantApp', []);
+var participantApp = angular.module('participantApp', ['ngCookies']);
 
-participantApp.controller ('ParticipantController', function ($scope, $http) {
+participantApp.controller ('ParticipantController', function ($scope, $http, $cookieStore) {
 
-//    $scope.test = function () {
-//    //    var vs = new WebSocket("@routes.ParticipantController.ws().webSocketURL(request)");
-//        var ws = new WebSocket(wsRoute);
-//        ws.onmessage = function (message) {
-//            $scope.message = message;
-//            console.log(message + "\n");
-//        };
-//    };
+    var participantID = $cookieStore.get('participantID')
 
-    var ws = new WebSocket(participantRoute);
+    var ws = new WebSocket(participantRoute + participantID);
     ws.onmessage = function (message) {
         $scope.message = angular.fromJson(message.data);
+
+
 
         if ($scope.message.question){
 
         }
 
+        if ($scope.message.participantID){
+            alert("ID in cookie: " + participantID);
+            if (!participantID) {
+            $cookieStore.put('participantID', $scope.message.participantID);
+            }
+        }
+
 
 
         $scope.$apply();
-        console.log(message + "\n");
+        console.log($scope.message + "\n");
     };
 
     $scope.sendReaction = function (answer){

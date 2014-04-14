@@ -34,7 +34,6 @@ public class LiveVoteActor extends UntypedActor {
             RemovePerformer removePerformer = (RemovePerformer)message;
             performerMap.remove(removePerformer.id);
         } else if (message instanceof AddParticipant) {
-            System.out.println("Added participant...");
             AddParticipant addParticipant = (AddParticipant)message;
             participantMap.put(addParticipant.id, getSender());
         } else if (message instanceof RemoveParticipant) {
