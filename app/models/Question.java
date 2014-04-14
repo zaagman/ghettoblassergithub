@@ -14,7 +14,7 @@ import static javax.persistence.CascadeType.PERSIST;
 /**
  * Created by zaagman on 03/04/14.
  */
-//@Entity
+@Entity
 public class Question extends Model {
 
     @Id
