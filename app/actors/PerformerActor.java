@@ -12,7 +12,7 @@ import actors.LiveVoteActor.*;
  */
 public class PerformerActor extends UntypedActor {
 
-    private final WebSocket.Out<JsonNode> out;
+    private WebSocket.Out<JsonNode> out;
 
     public PerformerActor(WebSocket.Out<JsonNode> out, Integer id) {
         this.out = out;
@@ -28,7 +28,7 @@ public class PerformerActor extends UntypedActor {
             Standing standing = new Standing(askQuestion.question);
             getSelf().tell(standing, getSelf());
         }
-        if (message instanceof Standing){
+        else if (message instanceof Standing){
             Standing reaction = (Standing) message;
             JsonNodeFactory factory = JsonNodeFactory.instance;
             ObjectNode jsonStanding = new ObjectNode(factory);
@@ -36,8 +36,12 @@ public class PerformerActor extends UntypedActor {
             out.write(jsonStanding);
             System.out.println("Standing sent...");
         }
-        if (message instanceof Start){
+        else if (message instanceof Start){
             LiveVoteActor.instance.tell(message, getSelf());
+        }
+        else if (message instanceof SetOut) {
+            SetOut setOut = (SetOut) message;
+            out = setOut.out;
         }
 
 

@@ -39,11 +39,4 @@ public class ParticipantActor extends UntypedActor {
 
     }
 
-    public static class SetOut {
-        final WebSocket.Out<JsonNode> out;
-
-        public SetOut(WebSocket.Out<JsonNode> out) {
-            this.out = out;
-        }
-    }
 }

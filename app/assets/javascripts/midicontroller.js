@@ -1,8 +1,10 @@
-var midicontrollerApp = angular.module('midicontrollerApp', []);
+var midicontrollerApp = angular.module('midicontrollerApp', ['ngCookies']);
 
-midicontrollerApp.controller ('MidicontrollerController', function ($scope, $http) {
+midicontrollerApp.controller ('MidicontrollerController', function ($scope, $http, $cookieStore) {
 
-    var ws = new WebSocket(midicontrollerRoute);
+    var midicontrollerID = $cookieStore.get('midicontrollerID')
+
+    var ws = new WebSocket(midicontrollerRoute + midicontrollerID);
     ws.onmessage = function (message) {
         $scope.message = angular.fromJson(message.data);
 
@@ -12,6 +14,11 @@ midicontrollerApp.controller ('MidicontrollerController', function ($scope, $htt
             testNote($scope.message.sendNote);
             console.log("note sent: " + $scope.message.sendNote);
         }
+
+        if ($scope.message.midicontrollerID){
+                $cookieStore.put('midicontrollerID', $scope.message.midicontrollerID);
+        }
+
         $scope.$apply();
     }
 

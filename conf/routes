@@ -20,7 +20,7 @@ GET     /participantWs              controllers.ParticipantController.ws(partici
 
 
 GET     /midicontroller             controllers.MidicontrollerController.midicontroller()
-GET     /midicontrollerWs           controllers.MidicontrollerController.ws()
+GET     /midicontrollerWs           controllers.MidicontrollerController.ws(midicontrollerID)
 
 GET     /performer                  controllers.PerformerController.performer()
-GET     /performerWs                controllers.PerformerController.ws()
+GET     /performerWs                controllers.PerformerController.ws(performerID)

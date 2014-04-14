@@ -2,9 +2,10 @@ var participantApp = angular.module('participantApp', ['ngCookies']);
 
 participantApp.controller ('ParticipantController', function ($scope, $http, $cookieStore) {
 
-    var participantID = $cookieStore.get('participantID')
+    var participantID = $cookieStore.get('participantID');
 
     var ws = new WebSocket(participantRoute + participantID);
+    console.log(participantRoute + participantID);
     ws.onmessage = function (message) {
         $scope.message = angular.fromJson(message.data);
 

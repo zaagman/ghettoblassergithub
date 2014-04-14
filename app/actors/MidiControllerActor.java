@@ -15,7 +15,7 @@ import actors.LiveVoteActor.*;
  */
 public class MidicontrollerActor extends UntypedActor {
 
-    private final WebSocket.Out<JsonNode> out;
+    private WebSocket.Out<JsonNode> out;
 
     public MidicontrollerActor(WebSocket.Out<JsonNode> out, Integer id) {
         this.out = out;
@@ -36,6 +36,10 @@ public class MidicontrollerActor extends UntypedActor {
             ObjectNode jsonSendNote = new ObjectNode(factory);
             jsonSendNote.put("sendNote", sendNote.note);
             out.write(jsonSendNote);
+        }
+        else if (message instanceof SetOut) {
+            SetOut setOut = (SetOut) message;
+            out = setOut.out;
         }
     }
 

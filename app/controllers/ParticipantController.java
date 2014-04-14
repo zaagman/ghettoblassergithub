@@ -21,7 +21,7 @@ import java.util.Map;
 public class ParticipantController extends Controller {
 
     private static Integer participantCounter = 0;
-    private static Map<String, ActorRef> participantIDMap = new HashMap<String, ActorRef>();
+    private static Map<String, ActorRef> participantMap = new HashMap<String, ActorRef>();
 
 
     public static Result participant() {
@@ -29,25 +29,21 @@ public class ParticipantController extends Controller {
     }
 
     public static WebSocket<JsonNode> ws(final String participantID) {
-        System.out.println("Received ID: " + participantID);
 
         return new WebSocket<JsonNode>() {
             public void onReady(final WebSocket.In<JsonNode> in, final WebSocket.Out<JsonNode> out) {
                 final Integer id = participantCounter++;
                 final ActorRef participantActor;
-                if (participantIDMap.containsKey(participantID)) {
-                    participantActor = participantIDMap.get(participantID);
-                    participantActor.tell(new ParticipantActor.SetOut(out), null);
+                if (participantMap.containsKey(participantID)) {
+                    participantActor = participantMap.get(participantID);
+                    participantActor.tell(new LiveVoteActor.SetOut(out), null);
                     System.out.println("Linked to existing actor...");
                 } else {
 
                     participantActor = Akka.system().actorOf(Props.create(ParticipantActor.class, out, id));
-                    participantIDMap.put("participant" + id.toString(), participantActor);
-                    sendID(out, participantActor, id);
+                    participantMap.put("participant" + id.toString(), participantActor);
+                    sendID(out, id);
                     System.out.println("Linked to new actor...");
-                }
-                for (String test : participantIDMap.keySet()){
-                    System.out.println("in participantmap: " + test);
                 }
 
                 in.onMessage(new F.Callback<JsonNode>() {
@@ -71,12 +67,11 @@ public class ParticipantController extends Controller {
                 });
             }
 
-            private void sendID(Out<JsonNode> out, ActorRef participantActor, Integer id) {
+            private void sendID(Out<JsonNode> out, Integer id) {
                 JsonNodeFactory factory = JsonNodeFactory.instance;
                 ObjectNode jsonID = new ObjectNode(factory);
                 jsonID.put("participantID", "participant" + id);
                 out.write(jsonID);
-                System.out.println("ID " + "participant" + id + " sent...");
             }
         };
 

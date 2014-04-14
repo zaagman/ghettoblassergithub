@@ -1,23 +1,33 @@
-var performerApp = angular.module('performerApp', []);
+var performerApp = angular.module('performerApp', ['ngCookies']);
 
-performerApp.controller('PerformerController', function ($scope, $http) {
+performerApp.controller ('PerformerController', function ($scope, $http, $cookieStore) {
 
-    var ws = new WebSocket(performerRoute);
+    var performerID = $cookieStore.get('performerID');
+    var ws = new WebSocket(performerRoute + performerID);
+    console.log(performerRoute + performerID);
     ws.onmessage = function (message) {
         $scope.message = angular.fromJson(message.data);
 
-        console.log($scope.message);
+        if ($scope.message.performerID) {
+            $cookieStore.put('performerID', $scope.message.performerID);
+            console.log("putting in performerID");
+        }
 
-        if ($scope.message.standing){
+        if ($scope.message.standing) {
             $scope.standing = $scope.message.standing.question;
             $scope.$apply();
         }
-    }
 
-    $scope.start = function (){
-        ws.send(angular.toJson({"start": 1}));
+        console.log($scope.message);
+        $scope.$apply();
+    };
+
+    $scope.start = function () {
+        ws.send(angular.toJson({
+            "start": 1
+        }));
         console.log("sent start...");
-    }
+    };
 
 });
 

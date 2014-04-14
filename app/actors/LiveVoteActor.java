@@ -3,10 +3,12 @@ package actors;
 import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
+import com.fasterxml.jackson.databind.JsonNode;
 import models.Answer;
 import models.Question;
 import models.Questionlist;
 import play.libs.Akka;
+import play.mvc.WebSocket;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,17 +49,17 @@ public class LiveVoteActor extends UntypedActor {
             midicontrollerMap.remove(removeMidicontroller.id);
         }
 
-        if (message instanceof Questionlist){
+        else if (message instanceof Questionlist){
             questionlist = (Questionlist)message;
             System.out.println("Setting questionlist...");
         }
-        if (message instanceof Start) {
+        else if (message instanceof Start) {
             if (questionlist != null){
                 System.out.println("Scheduling questionlist...");
                 scheduler.scheduleQuestionlist(questionlist);
             }
         }
-        if (message instanceof AskQuestion) {
+        else if (message instanceof AskQuestion) {
             System.out.println("Asking question...");
             AskQuestion askQuestion = (AskQuestion)message;
             currentQuestion = askQuestion.question;
@@ -74,7 +76,7 @@ public class LiveVoteActor extends UntypedActor {
             }
         }
 
-        if (message instanceof SendResult) {
+        else if (message instanceof SendResult) {
             SendResult sendResult = (SendResult) message;
             System.out.println("Sending Result...");
 //            If there were no reactions send the first answer as result
@@ -94,7 +96,7 @@ public class LiveVoteActor extends UntypedActor {
                 participant.tell(message, this.getSelf());
             }
         }
-        if (message instanceof Reaction){
+        else if (message instanceof Reaction){
             for(ActorRef performer : performerMap.values()){
                 performer.tell(new Standing(currentQuestion), getSelf());
 
@@ -185,6 +187,14 @@ public class LiveVoteActor extends UntypedActor {
         final Question standing;
         public Standing(Question standing) {
             this.standing = standing;
+        }
+    }
+
+    public static class SetOut {
+        final WebSocket.Out<JsonNode> out;
+
+        public SetOut(WebSocket.Out<JsonNode> out) {
+            this.out = out;
         }
     }
 }
