@@ -37,11 +37,11 @@ public class ParticipantController extends Controller {
                 final ActorRef participantActor;
                 if (participantIDMap.containsKey(participantID)) {
                     participantActor = participantIDMap.get(participantID);
-                    sendID(out, participantActor);
+                    participantActor.tell(new ParticipantActor.SetOut(out), null);
                 } else {
                     participantActor = Akka.system().actorOf(Props.create(ParticipantActor.class, out, id));
                     participantIDMap.put(id.toString(), participantActor);
-                    participantActor.tell(new ParticipantActor.SetOut(out), null);
+                    sendID(out, participantActor);
                 }
 
                 in.onMessage(new F.Callback<JsonNode>() {
