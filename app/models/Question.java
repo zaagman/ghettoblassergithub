@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 //import play.db.ebean.Model;
 
-import javax.persistence.*;
+//import javax.persistence.*;
 import java.util.ArrayList;
 
 //import static javax.persistence.CascadeType.PERSIST;
