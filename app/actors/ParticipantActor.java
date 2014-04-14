@@ -9,7 +9,7 @@ import actors.LiveVoteActor.*;
 
 public class ParticipantActor extends UntypedActor {
 
-    private final WebSocket.Out<JsonNode> out;
+    private WebSocket.Out<JsonNode> out;
 
     private Question currentQuestion;
     private Answer currentReaction;
@@ -37,5 +37,11 @@ public class ParticipantActor extends UntypedActor {
 
     }
 
+    public static class SetOut {
+        final WebSocket.Out<JsonNode> out;
 
+        public SetOut(WebSocket.Out<JsonNode> out) {
+            this.out = out;
+        }
+    }
 }
