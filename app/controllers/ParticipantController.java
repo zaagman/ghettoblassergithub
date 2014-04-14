@@ -32,12 +32,12 @@ public class ParticipantController extends Controller {
                 in.onMessage(new F.Callback<JsonNode>() {
                     @Override
                     public void invoke(JsonNode jsonNode) throws Throwable {
-                        System.out.println("Message recieved: " + jsonNode.toString());
+                        System.out.println("Participant" + participantCounter + " received: " + jsonNode.toString());
                         if (jsonNode.has("answertext")){
                             Answer answer = new Answer();
                             answer.answertext = jsonNode.get("answertext").asText();
                             answer.note = jsonNode.get("note").asInt();
-                            participantActor.tell(new ParticipantActor.ReceiveReaction(answer), null);
+                            participantActor.tell(new LiveVoteActor.Reaction(answer), null);
                         }
                     }
                 });

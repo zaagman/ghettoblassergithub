@@ -21,6 +21,8 @@ public class LiveVoteActor extends UntypedActor {
 
     private Questionlist questionlist = null;
 
+    private Question currentQuestion;
+
     Scheduler scheduler = new Scheduler(this.getSelf());
 
     @Override
@@ -49,18 +51,17 @@ public class LiveVoteActor extends UntypedActor {
         if (message instanceof Questionlist){
             questionlist = (Questionlist)message;
             System.out.println("Setting questionlist...");
-//            System.out.println(questionlist);
-            self().tell(new Start(), self());
         }
         if (message instanceof Start) {
             if (questionlist != null){
                 System.out.println("Scheduling questionlist...");
-//                System.out.println(questionlists.get(0));
                 scheduler.scheduleQuestionlist(questionlist);
             }
         }
         if (message instanceof AskQuestion) {
             System.out.println("Asking question...");
+            AskQuestion askQuestion = (AskQuestion)message;
+            currentQuestion = askQuestion.question;
             for (ActorRef performer : performerMap.values()){
                 performer.tell(message, this.getSelf());
             }
@@ -81,7 +82,6 @@ public class LiveVoteActor extends UntypedActor {
             if (sendResult.question.result == null){
                 sendResult.question.addReaction(sendResult.question.answers.get(0));
             }
-            System.out.println(sendResult.question);
 //            Send question to operators
             for (ActorRef performer : performerMap.values()){
                 performer.tell(message, this.getSelf());
@@ -93,6 +93,12 @@ public class LiveVoteActor extends UntypedActor {
 //            Send message to guests
             for (ActorRef participant : participantMap.values()){
                 participant.tell(message, this.getSelf());
+            }
+        }
+        if (message instanceof Reaction){
+            for(ActorRef performer : performerMap.values()){
+                performer.tell(new Standing(currentQuestion), getSelf());
+
             }
         }
     }
@@ -170,12 +176,16 @@ public class LiveVoteActor extends UntypedActor {
     }
 
     public static class Reaction {
-        public Answer reaction;
-
-        public Reaction (Answer reaction){
+        final Answer reaction;
+        public Reaction(Answer reaction) {
             this.reaction = reaction;
         }
     }
 
-    public static class NewOperatorActor {}
+    public static class Standing {
+        final Question standing;
+        public Standing(Question standing) {
+            this.standing = standing;
+        }
+    }
 }

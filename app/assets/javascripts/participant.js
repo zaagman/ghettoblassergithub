@@ -1,6 +1,6 @@
-var questionsApp = angular.module('participantApp', []);
+var participantApp = angular.module('participantApp', []);
 
-questionsApp.controller ('ParticipantController', function ($scope, $http) {
+participantApp.controller ('ParticipantController', function ($scope, $http) {
 
 //    $scope.test = function () {
 //    //    var vs = new WebSocket("@routes.ParticipantController.ws().webSocketURL(request)");
@@ -11,7 +11,7 @@ questionsApp.controller ('ParticipantController', function ($scope, $http) {
 //        };
 //    };
 
-    var ws = new WebSocket(wsRoute);
+    var ws = new WebSocket(participantRoute);
     ws.onmessage = function (message) {
         $scope.message = angular.fromJson(message.data);
 

@@ -1,0 +1,31 @@
+@import play.mvc.Http.Context.Implicit._
+
+@main("Performer Testpage"){<!--test-->} {
+
+
+<div ng-app="performerApp">
+    <div id="performerPane" ng-controller="PerformerController">
+
+        <script>
+            var performerRoute = "@routes.PerformerController.ws.webSocketURL(request)";
+        </script>
+        <script type='text/javascript' src='@routes.Assets.at("javascripts/performer.min.js")'></script>
+
+        <p>
+            Hello Performer!
+        </p>
+        <h1>{{standing.questiontext}}</h1>
+        <table>
+            <tr ng-repeat="answer in standing.answers">
+                <td>{{answer.reactions}}</td>
+                <td>{{answer.answertext}}</td>
+            </tr>
+        </table>
+        <p>
+            <button ng-click="start()">Start!</button>
+        </p>
+        <pre ng-model="log"> </pre>
+
+    </div>
+</div>
+}

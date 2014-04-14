@@ -37,17 +37,14 @@ public class Answer extends Model {
         }
     }
 
-    public JsonNode asJson() {
+    public JsonNode toJson() {
         JsonNodeFactory factory = JsonNodeFactory.instance;
         ObjectNode jsonAnswer = new ObjectNode(factory);
 
         jsonAnswer.put("answertext", answertext);
         jsonAnswer.put("note", note);
+        jsonAnswer.put("reactions", reactionCounter);
 
-
-        if (reactionCounter > 0){
-            jsonAnswer.put("reactions", reactionCounter);
-        }
 
         return jsonAnswer;
 

@@ -35,10 +35,7 @@ public class MainController extends Controller {
         JsonNode data = request().body().asJson();
         Questionlist questionlist = Questionlist.newQuestionlistFromJson(data);
 
-
         LiveVoteActor.instance.tell(questionlist, null);
-
-        System.out.println(questionlist.toJson().toString());
 
         return ok(views.html.questions.render());
     }

@@ -1,14 +1,9 @@
 package actors;
 
-import akka.actor.ActorRef;
-import akka.actor.Props;
 import akka.actor.UntypedActor;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.Answer;
 import models.Question;
-import play.libs.Akka;
-import play.libs.Json;
 import play.mvc.WebSocket;
 import actors.LiveVoteActor.*;
 
@@ -21,7 +16,7 @@ public class ParticipantActor extends UntypedActor {
 
     public ParticipantActor(WebSocket.Out<JsonNode> out, Integer id) {
         this.out = out;
-        System.out.println("creating actor...");
+        System.out.println("creating ParticipantActor...");
         LiveVoteActor.instance.tell(new LiveVoteActor.AddParticipant(id), getSelf());
     }
 
@@ -33,18 +28,14 @@ public class ParticipantActor extends UntypedActor {
             currentQuestion = askQuestion.question;
             out.write(askQuestion.question.toJson());
         }
-        if (message instanceof ReceiveReaction){
-            ReceiveReaction receiveReaction = (ReceiveReaction) message;
-            currentQuestion.addReaction(receiveReaction.reaction);
-            System.out.println("Reaction added");
+        if (message instanceof Reaction){
+            Reaction reaction = (Reaction) message;
+            currentQuestion.addReaction(reaction.reaction);
+            System.out.println("Reaction added...");
+            LiveVoteActor.instance.tell(message, getSelf());
         }
 
     }
 
-    public static class ReceiveReaction {
-        final Answer reaction;
-        public ReceiveReaction(Answer reaction) {
-            this.reaction = reaction;
-        }
-    }
+
 }

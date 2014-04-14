@@ -1,8 +1,8 @@
-var questionsApp = angular.module('midicontrollerApp', []);
+var midicontrollerApp = angular.module('midicontrollerApp', []);
 
-questionsApp.controller ('MidicontrollerController', function ($scope, $http) {
+midicontrollerApp.controller ('MidicontrollerController', function ($scope, $http) {
 
-    var ws = new WebSocket(wsRoute);
+    var ws = new WebSocket(midicontrollerRoute);
     ws.onmessage = function (message) {
         $scope.message = angular.fromJson(message.data);
 
@@ -13,7 +13,6 @@ questionsApp.controller ('MidicontrollerController', function ($scope, $http) {
             console.log("note sent: " + $scope.message.sendNote);
         }
         $scope.$apply();
-        console.log(message + "\n");
     }
 
     $scope.test = function() {

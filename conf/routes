@@ -21,3 +21,6 @@ GET     /participantWs              controllers.ParticipantController.ws()
 
 GET     /midicontroller             controllers.MidicontrollerController.midicontroller()
 GET     /midicontrollerWs           controllers.MidicontrollerController.ws()
+
+GET     /performer                  controllers.PerformerController.performer()
+GET     /performerWs                controllers.PerformerController.ws()

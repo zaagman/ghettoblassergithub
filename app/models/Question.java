@@ -7,10 +7,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import play.db.ebean.Model;
 
 import javax.persistence.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import static javax.persistence.CascadeType.PERSIST;
 
@@ -98,13 +95,13 @@ public class Question extends Model {
         jsonQuestionAttributes.put("duration", duration);
         ArrayNode jsonAnswers = new ArrayNode(factory);
         for (Answer answer : answers){
-            jsonAnswers.add(answer.asJson());
+            jsonAnswers.add(answer.toJson());
         }
 
         jsonQuestionAttributes.put("answers", jsonAnswers);
 
         if (this.hasResult()){
-            jsonQuestionAttributes.put("result", result.asJson());
+            jsonQuestionAttributes.put("result", result.toJson());
         }
         jsonQuestion.put("question", jsonQuestionAttributes);
         return jsonQuestion;
