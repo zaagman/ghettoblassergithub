@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import javax.persistence.*;
 import java.util.ArrayList;
 
-import static javax.persistence.CascadeType.PERSIST;
+//import static javax.persistence.CascadeType.PERSIST;
 
 /**
  * Created by zaagman on 03/04/14.
@@ -21,7 +21,7 @@ public class Questionlist /*extends Model*/ {
 //    @GeneratedValue
 //    public long id;
     public String user;
-    @OneToMany (cascade = PERSIST)
+//    @OneToMany (cascade = PERSIST)
     public ArrayList<Question> questions = new ArrayList<Question>();
 
 //    public static Finder<Long,Questionlist> find = new Finder(

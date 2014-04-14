@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import javax.persistence.*;
 import java.util.ArrayList;
 
-import static javax.persistence.CascadeType.PERSIST;
+//import static javax.persistence.CascadeType.PERSIST;
 
 /**
  * Created by zaagman on 03/04/14.
@@ -23,7 +23,7 @@ public class Question /*extends Model*/ {
     public String questiontext;
     public int time;
     public int duration;
-    @OneToMany (cascade = PERSIST)
+//    @OneToMany (cascade = PERSIST)
     public ArrayList<Answer> answers = new ArrayList<Answer>();
 
 //    Result is null until the question is answered
