@@ -14,12 +14,12 @@ import static javax.persistence.CascadeType.PERSIST;
 /**
  * Created by zaagman on 03/04/14.
  */
-@Entity
-public class Question extends Model {
+//@Entity
+public class Question /*extends Model*/ {
 
-    @Id
-    @GeneratedValue
-    long id;
+//    @Id
+//    @GeneratedValue
+//    long id;
     public String questiontext;
     public int time;
     public int duration;
@@ -29,9 +29,9 @@ public class Question extends Model {
 //    Result is null until the question is answered
     public Answer result;
 
-    public static Finder<Long,Question> find = new Finder(
-            Long.class, Question.class
-    );
+//    public static Finder<Long,Question> find = new Finder(
+//            Long.class, Question.class
+//    );
 
     public boolean hasResult (){
         return result != null;

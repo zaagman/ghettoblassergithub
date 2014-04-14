@@ -11,19 +11,19 @@ import play.db.ebean.*;
 /**
  * Created by zaagman on 03/04/14.
  */
-@Entity
-public class Answer extends Model {
+//@Entity
+public class Answer /*extends Model*/ {
 
-    @Id
-    @GeneratedValue
-    public long id;
+//    @Id
+//    @GeneratedValue
+//    public long id;
     public String answertext;
     public int note;
     private int reactionCounter = 0;
 
-    public static Finder<Long,Answer> find = new Finder(
-            Long.class, Answer.class
-    );
+//    public static Finder<Long,Answer> find = new Finder(
+//            Long.class, Answer.class
+//    );
 
     public String toString () {
 
