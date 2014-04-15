@@ -59,7 +59,7 @@ public class PerformerController extends Controller {
                 in.onClose(new F.Callback0() {
                     @Override
                     public void invoke() throws Throwable {
-                        LiveVoteActor.instance.tell(new LiveVoteActor.RemovePerformer(id), performerActor);
+                        LiveVoteActor.instance.tell(new LiveVoteActor.RemovePerformer(), performerActor);
                     }
                 });
             }

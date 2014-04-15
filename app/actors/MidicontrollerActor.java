@@ -11,10 +11,10 @@ public class MidicontrollerActor extends UntypedActor {
 
     private WebSocket.Out<JsonNode> out;
 
-    public MidicontrollerActor(WebSocket.Out<JsonNode> out, Integer id) {
+    public MidicontrollerActor(WebSocket.Out<JsonNode> out) {
         this.out = out;
         System.out.println("creating MidicontrollerActor...");
-        LiveVoteActor.instance.tell(new AddMidicontroller(id), getSelf());
+        LiveVoteActor.instance.tell(new AddMidicontroller(), getSelf());
     }
     @Override
     public void onReceive(Object message) throws Exception {
@@ -34,9 +34,9 @@ public class MidicontrollerActor extends UntypedActor {
         else if (message instanceof SetOut) {
             SetOut setOut = (SetOut) message;
             out = setOut.out;
+            LiveVoteActor.instance.tell(new AddMidicontroller(), getSelf());
         }
     }
-
 
     public static class SendNote {
         final int note;

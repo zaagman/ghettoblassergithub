@@ -7,17 +7,14 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import play.mvc.WebSocket;
 import actors.LiveVoteActor.*;
 
-/**
- * Created by zaagman on 09/04/14.
- */
 public class PerformerActor extends UntypedActor {
 
     private WebSocket.Out<JsonNode> out;
 
-    public PerformerActor(WebSocket.Out<JsonNode> out, Integer id) {
+    public PerformerActor(WebSocket.Out<JsonNode> out) {
         this.out = out;
         System.out.println("creating PerformerActor...");
-        LiveVoteActor.instance.tell(new AddPerformer(id), getSelf());
+        LiveVoteActor.instance.tell(new AddPerformer(), getSelf());
     }
 
     @Override
@@ -42,6 +39,7 @@ public class PerformerActor extends UntypedActor {
         else if (message instanceof SetOut) {
             SetOut setOut = (SetOut) message;
             out = setOut.out;
+            LiveVoteActor.instance.tell(new AddPerformer(), getSelf());
         }
 
 

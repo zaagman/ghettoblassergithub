@@ -39,8 +39,7 @@ public class ParticipantController extends Controller {
                     participantActor.tell(new LiveVoteActor.SetOut(out), null);
                     System.out.println("Linked to existing actor...");
                 } else {
-
-                    participantActor = Akka.system().actorOf(Props.create(ParticipantActor.class, out, id));
+                    participantActor = Akka.system().actorOf(Props.create(ParticipantActor.class, out));
                     participantMap.put("participant" + id.toString(), participantActor);
                     sendID(out, id);
                     System.out.println("Linked to new actor...");
@@ -62,7 +61,7 @@ public class ParticipantController extends Controller {
                 in.onClose(new F.Callback0() {
                     @Override
                     public void invoke() throws Throwable {
-                        LiveVoteActor.instance.tell(new LiveVoteActor.RemoveParticipant(id), participantActor);
+                        LiveVoteActor.instance.tell(new LiveVoteActor.RemoveParticipant(), participantActor);
                     }
                 });
             }

@@ -7,19 +7,22 @@ import com.fasterxml.jackson.databind.JsonNode;
 import models.Answer;
 import models.Question;
 import models.Questionlist;
+import play.Logger;
 import play.libs.Akka;
 import play.mvc.WebSocket;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class LiveVoteActor extends UntypedActor {
 
     public static ActorRef instance = Akka.system().actorOf(new Props(LiveVoteActor.class));
 
-    private final Map<Integer, ActorRef> performerMap = new HashMap<Integer, ActorRef>();
-    private final Map<Integer, ActorRef> participantMap = new HashMap<Integer, ActorRef>();
-    private final Map<Integer, ActorRef> midicontrollerMap = new HashMap<Integer, ActorRef>();
+    private final Set<ActorRef> performerSet = new HashSet<>();
+    private final Set<ActorRef> participantSet = new HashSet<>();
+    private final Set<ActorRef> midicontrollerSet = new HashSet<>();
 
     private Questionlist questionlist = null;
 
@@ -30,23 +33,23 @@ public class LiveVoteActor extends UntypedActor {
     @Override
     public void onReceive(Object message) throws Exception {
         if (message instanceof AddPerformer) {
-            AddPerformer addPerformer = (AddPerformer)message;
-            performerMap.put(addPerformer.id, getSender());
+            performerSet.add(getSender());
+            Logger.info("Add performer - (performers: " + performerSet.size() + ")");
         } else if (message instanceof RemovePerformer) {
-            RemovePerformer removePerformer = (RemovePerformer)message;
-            performerMap.remove(removePerformer.id);
-        } else if (message instanceof AddParticipant) {
-            AddParticipant addParticipant = (AddParticipant)message;
-            participantMap.put(addParticipant.id, getSender());
-        } else if (message instanceof RemoveParticipant) {
-            RemoveParticipant removeParticipant = (RemoveParticipant)message;
-            participantMap.remove(removeParticipant.id);
+            performerSet.remove(getSender());
+            Logger.info("Remove performer - (performers: " + performerSet.size() + ")");
         } else if (message instanceof AddMidicontroller) {
-            AddMidicontroller addMidicontroller = (AddMidicontroller)message;
-            midicontrollerMap.put(addMidicontroller.id, getSender());
+            midicontrollerSet.add(getSender());
+            Logger.info("Add midicontroller - (midicontrollers: " + midicontrollerSet.size() + ")");
         } else if (message instanceof RemoveMidicontroller) {
-            RemoveMidicontroller removeMidicontroller = (RemoveMidicontroller)message;
-            midicontrollerMap.remove(removeMidicontroller.id);
+            midicontrollerSet.remove(getSender());
+            Logger.info("Remove midicontroller - (midicontrollers: " + midicontrollerSet.size() + ")");
+        } else if (message instanceof AddParticipant) {
+            participantSet.add(getSender());
+            Logger.info("Add participant - (participants: " + participantSet.size() + ")");
+        } else if (message instanceof RemoveParticipant) {
+            participantSet.remove(getSender());
+            Logger.info("Remove participant - (participants: " + participantSet.size() + ")");
         }
 
         else if (message instanceof Questionlist){
@@ -63,15 +66,15 @@ public class LiveVoteActor extends UntypedActor {
             System.out.println("Asking question...");
             AskQuestion askQuestion = (AskQuestion)message;
             currentQuestion = askQuestion.question;
-            for (ActorRef performer : performerMap.values()){
+            for (ActorRef performer : performerSet){
                 performer.tell(message, this.getSelf());
             }
 //            Send Question to midicontrollers
-            for (ActorRef midicontroller : midicontrollerMap.values()){
+            for (ActorRef midicontroller : midicontrollerSet){
                 midicontroller.tell(message, this.getSelf());
             }
 //            Send message to guests
-            for (ActorRef participant : participantMap.values()){
+            for (ActorRef participant : participantSet){
                 participant.tell(message, this.getSelf());
             }
         }
@@ -84,82 +87,35 @@ public class LiveVoteActor extends UntypedActor {
                 sendResult.question.addReaction(sendResult.question.answers.get(0));
             }
 //            Send question to operators
-            for (ActorRef performer : performerMap.values()){
+            for (ActorRef performer : performerSet){
                 performer.tell(message, this.getSelf());
             }
 //            Send Question to midicontrollers
-            for (ActorRef midicontroller : midicontrollerMap.values()){
+            for (ActorRef midicontroller : midicontrollerSet){
                 midicontroller.tell(message, this.getSelf());
             }
 //            Send message to guests
-            for (ActorRef participant : participantMap.values()){
+            for (ActorRef participant : participantSet){
                 participant.tell(message, this.getSelf());
             }
         }
         else if (message instanceof Reaction){
-            for(ActorRef performer : performerMap.values()){
+            for(ActorRef performer : performerSet){
                 performer.tell(new Standing(currentQuestion), getSelf());
 
             }
         }
     }
 
-    public static class AddPerformer {
-        final Integer id;
 
-        public AddPerformer(Integer id) {
-            this.id = id;
-        }
-    }
+    public static class AddPerformer {}
+    public static class RemovePerformer {}
+    public static class AddParticipant {}
+    public static class RemoveParticipant {}
+    public static class AddMidicontroller {}
+    public static class RemoveMidicontroller {}
 
-    public static class RemovePerformer {
-        final Integer id;
-
-        public RemovePerformer(Integer id) {
-            this.id = id;
-        }
-    }
-
-    public static class AddParticipant {
-        final Integer id;
-
-        public AddParticipant(Integer id) {
-            this.id = id;
-        }
-    }
-
-    public static class RemoveParticipant {
-        final Integer id;
-
-        public RemoveParticipant(Integer id) {
-            this.id = id;
-        }
-    }
-
-    public static class AddMidicontroller {
-        final Integer id;
-
-        public AddMidicontroller(Integer id) {
-            this.id = id;
-        }
-    }
-
-    public static class RemoveMidicontroller {
-
-        final Integer id;
-        public RemoveMidicontroller(Integer id) {
-            this.id = id;
-        }
-
-    }
-
-
-    public static class Start {
-
-        public Start()	{
-
-        }
-    }
+    public static class Start {}
 
     public static class AskQuestion  {
         final public Question question;

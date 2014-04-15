@@ -52,7 +52,7 @@ public class MidicontrollerController extends Controller {
                 in.onClose(new F.Callback0() {
                     @Override
                     public void invoke() throws Throwable {
-                        LiveVoteActor.instance.tell(new LiveVoteActor.RemoveMidicontroller(id), midicontrollerActor);
+                        LiveVoteActor.instance.tell(new LiveVoteActor.RemoveMidicontroller(), midicontrollerActor);
                     }
                 });
 

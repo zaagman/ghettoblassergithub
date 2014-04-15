@@ -14,13 +14,10 @@ public class ParticipantActor extends UntypedActor {
     private Question currentQuestion;
     private Answer currentReaction;
 
-    private Integer id;
-
-    public ParticipantActor(WebSocket.Out<JsonNode> out, Integer id) {
+    public ParticipantActor(WebSocket.Out<JsonNode> out) {
         this.out = out;
-        this.id = id;
         System.out.println("creating ParticipantActor...");
-        LiveVoteActor.instance.tell(new LiveVoteActor.AddParticipant(id), getSelf());
+        LiveVoteActor.instance.tell(new LiveVoteActor.AddParticipant(), getSelf());
     }
 
     @Override
@@ -38,7 +35,7 @@ public class ParticipantActor extends UntypedActor {
         } else if (message instanceof SetOut) {
             SetOut setOut = (SetOut) message;
             out = setOut.out;
-            LiveVoteActor.instance.tell(new LiveVoteActor.AddParticipant(id), getSelf());
+            LiveVoteActor.instance.tell(new LiveVoteActor.AddParticipant(), getSelf());
         }
 
     }
