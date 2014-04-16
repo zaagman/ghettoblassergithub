@@ -33,6 +33,12 @@ public class Scheduler {
                     new SendResult(question),
                     Akka.system().dispatcher(),
                     null);
+            Akka.system().scheduler().scheduleOnce(
+                    Duration.create(question.time + question.duration + question.end, "seconds"),
+                    livevoteActor,
+                    new SendEnd(question),
+                    Akka.system().dispatcher(),
+                    null);
         }
 
 

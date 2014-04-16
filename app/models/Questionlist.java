@@ -38,14 +38,26 @@ public class Questionlist /*extends Model*/ {
 
     public JsonNode toJson () {
         JsonNodeFactory factory = JsonNodeFactory.instance;
-        ArrayNode jsonQuestionlist = new ArrayNode(factory);
-        ObjectNode jsonUser = new ObjectNode(factory);
-        jsonUser.put("user", user);
-        jsonQuestionlist.add(jsonUser);
+
+        ArrayNode jsonQuestions = new ArrayNode(factory);
         for (Question question : questions){
-            jsonQuestionlist.add (question.toJson());
+            jsonQuestions.add (question.toJson());
         }
+
+        ObjectNode jsonQuestionlist = new ObjectNode(factory);
+        jsonQuestionlist.put("questions", jsonQuestions);
         return jsonQuestionlist;
+    }
+
+    public static Questionlist getActiveAndPost(Questionlist questionlist){
+        Questionlist list = new Questionlist();
+        list.user = questionlist.user;
+        for(Question question : questionlist.questions){
+            if (question.status.equals(Question.StatusEnum.ACTIVE) || question.status.equals(Question.StatusEnum.POST)){
+                list.questions.add(question);
+            }
+        }
+        return list;
     }
 
     public static Questionlist newQuestionlistFromJson(JsonNode data) {
@@ -56,6 +68,14 @@ public class Questionlist /*extends Model*/ {
                 question.questiontext = questionNode.get("questiontext").asText();
                 question.time = questionNode.get("time").asInt();
                 question.duration = questionNode.get("duration").asInt();
+                question.end = questionNode.get("end").asInt();
+                if (questionNode.has("allowMultipleReactions")){
+                    question.allowMultipleReactions = questionNode.get("allowMultipleReactions").asBoolean();
+                }
+                else {
+                    question.allowMultipleReactions = false;
+                }
+
                 if(questionNode.has("answers")){
                     for (final JsonNode answerNode : questionNode.get("answers")){
                         Answer answer = new Answer();
@@ -69,5 +89,17 @@ public class Questionlist /*extends Model*/ {
         }
 
         return questionlist;
+    }
+
+    public Answer getAnswerRef(Answer answerData) {
+        Answer answerRef = null;
+        for (Question question : questions){
+            for (Answer answer : question.answers){
+                if (answer.equals(answerData)){
+                    answerRef = answer;
+                }
+            }
+        }
+        return answerRef;
     }
 }

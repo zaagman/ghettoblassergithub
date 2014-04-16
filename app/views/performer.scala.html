@@ -14,13 +14,15 @@
         <p>
             Hello Performer!
         </p>
-        <h1>{{standing.questiontext}}</h1>
+        <div id="questions" ng-repeat="question in message.questions">
+        <h1>{{question.questiontext}}</h1>
         <table>
-            <tr ng-repeat="answer in standing.answers">
+            <tr ng-repeat="answer in question.answers">
                 <td>{{answer.reactions}}</td>
                 <td>{{answer.answertext}}</td>
             </tr>
         </table>
+        </div>
         <p>
             <button ng-click="start()">Start!</button>
         </p>

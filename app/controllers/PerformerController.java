@@ -1,7 +1,6 @@
 package controllers;
 
 import actors.LiveVoteActor;
-import actors.ParticipantActor;
 import actors.PerformerActor;
 import akka.actor.ActorRef;
 import akka.actor.Props;
@@ -35,11 +34,11 @@ public class PerformerController extends Controller {
                 final ActorRef performerActor;
                 if (performerMap.containsKey(performerID)) {
                     performerActor = performerMap.get(performerID);
-                    performerActor.tell(new LiveVoteActor.SetOut(out), null);
+                    performerActor.tell(new LiveVoteActor.Reconnect(out), null);
                     System.out.println("Linked to existing actor...");
                 } else {
 
-                    performerActor = Akka.system().actorOf(Props.create(PerformerActor.class, out, id));
+                    performerActor = Akka.system().actorOf(Props.create(PerformerActor.class, out));
                     performerMap.put("performer" + id.toString(), performerActor);
                     sendID(out, id);
                     System.out.println("Linked to new actor...");

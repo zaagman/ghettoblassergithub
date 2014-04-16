@@ -17,6 +17,8 @@ public class Answer /*extends Model*/ {
 //    @Id
 //    @GeneratedValue
 //    public long id;
+    private static int idCounter;
+    public Integer id;
     public String answertext;
     public int note;
     private int reactionCounter = 0;
@@ -25,16 +27,12 @@ public class Answer /*extends Model*/ {
 //            Long.class, Answer.class
 //    );
 
-    public String toString () {
+    public Answer () {
+        this.id = idCounter++;
+    }
 
-        if (reactionCounter > 0)
-        {
-            return reactionCounter + " reactions: " + answertext + " note: " + note + "\n";
-        }
-        else
-        {
-            return "answer: " + answertext + " note: " + note + "\n";
-        }
+    public String toString () {
+        return "Answer "+ id + ": " + answertext +" reactions: " + reactionCounter  + " note: " + note + "\n";
     }
 
     public JsonNode toJson() {
@@ -44,6 +42,7 @@ public class Answer /*extends Model*/ {
         jsonAnswer.put("answertext", answertext);
         jsonAnswer.put("note", note);
         jsonAnswer.put("reactions", reactionCounter);
+        jsonAnswer.put("id", id);
 
 
         return jsonAnswer;
@@ -64,7 +63,7 @@ public class Answer /*extends Model*/ {
             answer = (Answer)obj;
         }
         if (answer != null) {
-            if (this.answertext.equals(answer.answertext)){
+            if (this.id.equals(answer.id)){
                 return true;
             }
         }

@@ -12,6 +12,8 @@
                     <li>Question <input type="text" ng-model="question.questiontext"/></li>
                     <li>Time <input type="number" min="0" step="1" ng-model="question.time"/></li>
                     <li>Duration <input type="number" min="0" step="1" ng-model="question.duration"/></li>
+                    <li>End after <input type="number" min="0" step="1" ng-model="question.end"/></li>
+                    <li>Allow multiple reactions <input type="checkbox" ng-model="question.allowMultipleReactions" ng-false-value="false" ng-true-value="true"/></li>
                 </ul>
             </p>
             <div ng-repeat="answer in question.answers">

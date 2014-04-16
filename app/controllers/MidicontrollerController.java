@@ -33,10 +33,10 @@ public class MidicontrollerController extends Controller {
                 final ActorRef midicontrollerActor;
                 if (midicontrollerMap.containsKey(midicontrollerID)) {
                     midicontrollerActor = midicontrollerMap.get(midicontrollerID);
-                    midicontrollerActor.tell(new LiveVoteActor.SetOut(out), null);
+                    midicontrollerActor.tell(new LiveVoteActor.Reconnect(out), null);
                     System.out.println("Linked to existing actor...");
                 } else {
-                    midicontrollerActor = Akka.system().actorOf(Props.create(MidicontrollerActor.class, out, id));
+                    midicontrollerActor = Akka.system().actorOf(Props.create(MidicontrollerActor.class, out));
                     midicontrollerMap.put("midicontroller" + id.toString(), midicontrollerActor);
                     sendID(out, id);
                     System.out.println("Linked to new actor...");

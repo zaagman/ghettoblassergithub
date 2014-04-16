@@ -13,10 +13,7 @@ performerApp.controller ('PerformerController', function ($scope, $http, $cookie
             console.log("putting in performerID");
         }
 
-        if ($scope.message.standing) {
-            $scope.standing = $scope.message.standing.question;
-            $scope.$apply();
-        }
+
 
         console.log($scope.message);
         $scope.$apply();

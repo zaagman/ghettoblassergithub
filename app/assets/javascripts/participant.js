@@ -10,16 +10,9 @@ participantApp.controller ('ParticipantController', function ($scope, $http, $co
         $scope.message = angular.fromJson(message.data);
 
 
-
-        if ($scope.message.question){
-
-        }
-
         if ($scope.message.participantID){
             $cookieStore.put('participantID', $scope.message.participantID);
         }
-
-
 
         $scope.$apply();
         console.log($scope.message + "\n");

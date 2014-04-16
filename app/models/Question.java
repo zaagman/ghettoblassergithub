@@ -23,11 +23,21 @@ public class Question /*extends Model*/ {
     public String questiontext;
     public int time;
     public int duration;
+    public int end = 20;
+    public boolean allowMultipleReactions;
+
 //    @OneToMany (cascade = PERSIST)
     public ArrayList<Answer> answers = new ArrayList<Answer>();
 
 //    Result is null until the question is answered
     public Answer result;
+
+    public enum StatusEnum {
+        PRE, ACTIVE, POST, ENDED;
+    }
+
+    public StatusEnum status = StatusEnum.PRE;
+
 
 //    public static Finder<Long,Question> find = new Finder(
 //            Long.class, Question.class
@@ -39,16 +49,17 @@ public class Question /*extends Model*/ {
 
     public String toString () {
         String string = new String();
-        string = "question: " + questiontext + " time: " + time + " duration: " + duration + "\n";
+        string = "question: " + questiontext + " time: " + time + " duration: " + duration + " end in: " + end + "\n" ;
         string = string + "Answers: \n";
         for (Answer answer : answers){
             string = string + answer;
         }
+
         if (this.hasResult()){
             string = string + "Result: \n";
             string = string + result + "\n";
         }
-
+        string = string + "status: " + status.toString() + "\n";
         return string;
     }
 
@@ -85,25 +96,30 @@ public class Question /*extends Model*/ {
 
     public JsonNode toJson () {
         JsonNodeFactory factory = JsonNodeFactory.instance;
+
         ObjectNode jsonQuestion = new ObjectNode(factory);
 
-        ObjectNode jsonQuestionAttributes = new ObjectNode(factory);
 
-
-        jsonQuestionAttributes.put("questiontext", questiontext);
-        jsonQuestionAttributes.put("time", time);
-        jsonQuestionAttributes.put("duration", duration);
+        jsonQuestion.put("questiontext", questiontext);
+        jsonQuestion.put("time", time);
+        jsonQuestion.put("duration", duration);
+        jsonQuestion.put("end", end);
+        jsonQuestion.put("allowMultipleReactions", allowMultipleReactions);
+        jsonQuestion.put("status", status.toString());
         ArrayNode jsonAnswers = new ArrayNode(factory);
         for (Answer answer : answers){
             jsonAnswers.add(answer.toJson());
         }
 
-        jsonQuestionAttributes.put("answers", jsonAnswers);
+        jsonQuestion.put("answers", jsonAnswers);
 
         if (this.hasResult()){
-            jsonQuestionAttributes.put("result", result.toJson());
+            jsonQuestion.put("result", result.toJson());
         }
-        jsonQuestion.put("question", jsonQuestionAttributes);
         return jsonQuestion;
+    }
+
+    public void setStatus (StatusEnum status){
+        this.status = status;
     }
 }

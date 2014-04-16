@@ -31,9 +31,9 @@ public class MidicontrollerActor extends UntypedActor {
             jsonSendNote.put("sendNote", sendNote.note);
             out.write(jsonSendNote);
         }
-        else if (message instanceof SetOut) {
-            SetOut setOut = (SetOut) message;
-            out = setOut.out;
+        else if (message instanceof Reconnect) {
+            Reconnect reconnect = (Reconnect) message;
+            out = reconnect.out;
             LiveVoteActor.instance.tell(new AddMidicontroller(), getSelf());
         }
     }

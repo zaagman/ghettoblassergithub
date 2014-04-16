@@ -15,13 +15,18 @@
         <p>
             Hello participant!!
         </p>
-
-        <h1>{{message.question.questiontext}}</h1>
-        <ul>
-            <li ng-repeat="answer in message.question.answers"><a ng-click="sendReaction(answer)">{{answer.answertext}}</a></li>
-        </ul>
-
-
+        <div id="questions" ng-repeat="question in message.questions | filter: { status: 'ACTIVE' }">
+            <h1>{{question.questiontext}}</h1>
+            <ul>
+                <li ng-repeat="answer in question.answers"><a ng-click="sendReaction(answer)">{{answer.answertext}}</a></li>
+            </ul>
+        </div>
+        <div id="questions" ng-repeat="question in message.questions | filter: { status: 'POST' }">
+            <h1>{{question.questiontext}}</h1>
+            <ul>
+                <li ng-repeat="answer in question.answers | orderBy: reactions">{{answer.reactions}} {{answer.answertext}}</li>
+            </ul>
+        </div>
         <p>
             <button ng-click="test()">test!</button>
         </p>

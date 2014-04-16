@@ -36,7 +36,7 @@ public class ParticipantController extends Controller {
                 final ActorRef participantActor;
                 if (participantMap.containsKey(participantID)) {
                     participantActor = participantMap.get(participantID);
-                    participantActor.tell(new LiveVoteActor.SetOut(out), null);
+                    participantActor.tell(new LiveVoteActor.Reconnect(out), null);
                     System.out.println("Linked to existing actor...");
                 } else {
                     participantActor = Akka.system().actorOf(Props.create(ParticipantActor.class, out));
@@ -53,6 +53,7 @@ public class ParticipantController extends Controller {
                             Answer answer = new Answer();
                             answer.answertext = jsonNode.get("answertext").asText();
                             answer.note = jsonNode.get("note").asInt();
+                            answer.id = jsonNode.get("id").asInt();
                             participantActor.tell(new LiveVoteActor.Reaction(answer), null);
                         }
                     }
