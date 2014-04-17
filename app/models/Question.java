@@ -25,6 +25,7 @@ public class Question /*extends Model*/ {
     public int duration;
     public int end = 20;
     public boolean allowMultipleReactions;
+    private boolean hasResult = false;
 
 //    @OneToMany (cascade = PERSIST)
     public ArrayList<Answer> answers = new ArrayList<Answer>();
@@ -36,7 +37,7 @@ public class Question /*extends Model*/ {
         PRE, ACTIVE, POST, ENDED;
     }
 
-    public StatusEnum status = StatusEnum.PRE;
+    private StatusEnum status = StatusEnum.PRE;
 
 
 //    public static Finder<Long,Question> find = new Finder(
@@ -44,7 +45,14 @@ public class Question /*extends Model*/ {
 //    );
 
     public boolean hasResult (){
-        return result != null;
+        if (result != null){
+            hasResult = true;
+        }
+        else {
+            hasResult = false;
+        }
+
+        return hasResult;
     }
 
     public String toString () {
@@ -105,6 +113,10 @@ public class Question /*extends Model*/ {
         jsonQuestion.put("duration", duration);
         jsonQuestion.put("end", end);
         jsonQuestion.put("allowMultipleReactions", allowMultipleReactions);
+        jsonQuestion.put("hasResult", hasResult);
+        if (hasResult){
+            jsonQuestion.put("result", result.toJson());
+        }
         jsonQuestion.put("status", status.toString());
         ArrayNode jsonAnswers = new ArrayNode(factory);
         for (Answer answer : answers){
@@ -121,5 +133,22 @@ public class Question /*extends Model*/ {
 
     public void setStatus (StatusEnum status){
         this.status = status;
+        if (!this.allowMultipleReactions) {
+            if (status.equals(StatusEnum.POST)) {
+                for (Answer answer : answers) {
+                    if (hasResult()) {
+                        if (answer.numberOfReactions() > this.result.numberOfReactions()) {
+                            this.result = answer;
+                        }
+                    } else {
+                        this.result = answer;
+                    }
+                    hasResult = true;
+                }
+            }
+        }
+    }
+    public StatusEnum getStatus (){
+        return status;
     }
 }

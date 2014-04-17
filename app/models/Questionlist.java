@@ -53,7 +53,7 @@ public class Questionlist /*extends Model*/ {
         Questionlist list = new Questionlist();
         list.user = questionlist.user;
         for(Question question : questionlist.questions){
-            if (question.status.equals(Question.StatusEnum.ACTIVE) || question.status.equals(Question.StatusEnum.POST)){
+            if (question.getStatus().equals(Question.StatusEnum.ACTIVE) || question.getStatus().equals(Question.StatusEnum.POST)){
                 list.questions.add(question);
             }
         }
@@ -89,6 +89,18 @@ public class Questionlist /*extends Model*/ {
         }
 
         return questionlist;
+    }
+
+    public Question getQuestionRef(Answer answer){
+        Question question = null;
+        for (Question q : questions){
+            for (Answer a : q.answers){
+                if (a.equals(answer)){
+                    question = q;
+                }
+            }
+        }
+        return question;
     }
 
     public Answer getAnswerRef(Answer answerData) {

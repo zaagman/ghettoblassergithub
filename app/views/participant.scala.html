@@ -16,20 +16,37 @@
             Hello participant!!
         </p>
         <div id="questions" ng-repeat="question in message.questions | filter: { status: 'ACTIVE' }">
-            <h1>{{question.questiontext}}</h1>
-            <ul>
-                <li ng-repeat="answer in question.answers"><a ng-click="sendReaction(answer)">{{answer.answertext}}</a></li>
-            </ul>
+            <div id="question">
+            <h2>{{question.questiontext}}</h2>
+            <table>
+                <tr ng-repeat="answer in question.answers">
+                    <td ng-if="question.allowMultipleReactions">{{answer.reactions}}</td>
+                    <td><a ng-click="sendReaction(answer)">{{answer.answertext}}</a></td>
+                </tr>
+            </table>
+            </div>
         </div>
         <div id="questions" ng-repeat="question in message.questions | filter: { status: 'POST' }">
-            <h1>{{question.questiontext}}</h1>
-            <ul>
-                <li ng-repeat="answer in question.answers | orderBy: reactions">{{answer.reactions}} {{answer.answertext}}</li>
-            </ul>
+            <div ng-if="question.hasResult" id="result">
+                <h2>{{question.questiontext}}</h2>
+                <p>
+                    The result is: {{question.result.answertext}}
+                </p>
+            </div>
+            <div ng-if="!question.hasResult" id="question">
+            <h2>{{question.questiontext}}</h2>
+            <table>
+                <tr ng-repeat="answer in question.answers">
+                    <td ng-if="answer.allowMultipleReactions">{{answer.reactions}}</td>
+                    <td>{{answer.answertext}}</td>
+                </tr>
+            </table>
+            </div>
+
         </div>
-        <p>
-            <button ng-click="test()">test!</button>
-        </p>
+        <!--<p>-->
+            <!--<button ng-click="test()">test!</button>-->
+        <!--</p>-->
 
     </div>
 </div>

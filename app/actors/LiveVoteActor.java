@@ -31,18 +31,30 @@ public class LiveVoteActor extends UntypedActor {
     public void onReceive(Object message) throws Exception {
         if (message instanceof AddPerformer) {
             performerSet.add(getSender());
+            if (questionlist != null) {
+                SendActiveAndPost activeAndPost = new SendActiveAndPost(Questionlist.getActiveAndPost(questionlist));
+                getSender().tell(activeAndPost, getSelf());
+            }
             Logger.info("Add performer - (performers: " + performerSet.size() + ")");
         } else if (message instanceof RemovePerformer) {
             performerSet.remove(getSender());
             Logger.info("Remove performer - (performers: " + performerSet.size() + ")");
         } else if (message instanceof AddMidicontroller) {
             midicontrollerSet.add(getSender());
+            if (questionlist != null) {
+                SendActiveAndPost activeAndPost = new SendActiveAndPost(Questionlist.getActiveAndPost(questionlist));
+                getSender().tell(activeAndPost, getSelf());
+            }
             Logger.info("Add midicontroller - (midicontrollers: " + midicontrollerSet.size() + ")");
         } else if (message instanceof RemoveMidicontroller) {
             midicontrollerSet.remove(getSender());
             Logger.info("Remove midicontroller - (midicontrollers: " + midicontrollerSet.size() + ")");
         } else if (message instanceof AddParticipant) {
             participantSet.add(getSender());
+            if (questionlist != null) {
+                SendActiveAndPost activeAndPost = new SendActiveAndPost(Questionlist.getActiveAndPost(questionlist));
+                getSender().tell(activeAndPost, getSelf());
+            }
             Logger.info("Add participant - (participants: " + participantSet.size() + ")");
         } else if (message instanceof RemoveParticipant) {
             participantSet.remove(getSender());
@@ -64,17 +76,7 @@ public class LiveVoteActor extends UntypedActor {
             AskQuestion askQuestion = (AskQuestion)message;
             askQuestion.question.setStatus(Question.StatusEnum.ACTIVE);
             SendActiveAndPost activeAndPost = new SendActiveAndPost(Questionlist.getActiveAndPost(questionlist));
-            for (ActorRef performer : performerSet){
-                performer.tell(activeAndPost, this.getSelf());
-            }
-//            Send Question to midicontrollers
-            for (ActorRef midicontroller : midicontrollerSet){
-                midicontroller.tell(activeAndPost, this.getSelf());
-            }
-//            Send message to guests
-            for (ActorRef participant : participantSet){
-                participant.tell(activeAndPost, this.getSelf());
-            }
+            tellAll(activeAndPost);
         }
 
         else if (message instanceof SendResult) {
@@ -87,17 +89,7 @@ public class LiveVoteActor extends UntypedActor {
                 sendResult.question.addReaction(sendResult.question.answers.get(0));
             }
 //            Send question to operators
-            for (ActorRef performer : performerSet){
-                performer.tell(activeAndPost, this.getSelf());
-            }
-//            Send Question to midicontrollers
-            for (ActorRef midicontroller : midicontrollerSet){
-                midicontroller.tell(activeAndPost, this.getSelf());
-            }
-//            Send message to guests
-            for (ActorRef participant : participantSet){
-                participant.tell(activeAndPost, this.getSelf());
-            }
+            tellAll(activeAndPost);
         }
         else if (message instanceof SendEnd) {
             SendEnd sendEnd = (SendEnd) message;
@@ -108,28 +100,50 @@ public class LiveVoteActor extends UntypedActor {
             if (sendEnd.question.result == null){
                 sendEnd.question.addReaction(sendEnd.question.answers.get(0));
             }
-//            Send question to operators
-            for (ActorRef performer : performerSet){
-                performer.tell(activeAndPost, this.getSelf());
-            }
-//            Send Question to midicontrollers
-            for (ActorRef midicontroller : midicontrollerSet){
-                midicontroller.tell(activeAndPost, this.getSelf());
-            }
-//            Send message to guests
-            for (ActorRef participant : participantSet){
-                participant.tell(activeAndPost, this.getSelf());
-            }
+            tellAll(activeAndPost);
         }
 
         else if (message instanceof Reaction){
+            Reaction reaction = (Reaction)message;
+            Answer answer = questionlist.getAnswerRef(reaction.answer);
+            if (answer != null) {
+                answer.addReaction();
+            }
+            tellMidicontrollers(new MidicontrollerActor.SendNote(answer.note));
             SendActiveAndPost activeAndPost = new SendActiveAndPost(Questionlist.getActiveAndPost(questionlist));
-            for(ActorRef performer : performerSet){
-                performer.tell(activeAndPost, getSelf());
-
+            if (questionlist.getQuestionRef(reaction.answer).allowMultipleReactions){
+                tellAll(activeAndPost);
+            }
+            else {
+                tellPerformers(activeAndPost);
             }
         }
     }
+
+    public void tellAll(Object o){
+
+        tellMidicontrollers(o);
+        tellParticipants(o);
+        tellPerformers(o);
+    }
+    public void tellMidicontrollers (Object o){
+        for (ActorRef midicontroller : midicontrollerSet){
+            midicontroller.tell(o, this.getSelf());
+        }
+    }
+    public void tellParticipants (Object o){
+        for (ActorRef participant : participantSet){
+            participant.tell(o, this.getSelf());
+        }
+
+    }
+    public void tellPerformers (Object o){
+        for (ActorRef performer : performerSet){
+            performer.tell(o, this.getSelf());
+        }
+    }
+
+
 
 
     public static class AddPerformer {}

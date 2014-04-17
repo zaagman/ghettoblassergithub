@@ -28,15 +28,21 @@ public class ParticipantActor extends UntypedActor {
     public void onReceive(Object message) throws Exception {
 
         if (message instanceof Reaction){
-            Reaction reaction = (Reaction) message;
-            Answer answer = ownQuestionlist.getAnswerRef(reaction.answer);
-            if (answer != null) {
-                answer.addReaction();
+            Reaction reaction = (Reaction)message;
+            boolean reactionFound = false;
+            for (Reaction r : ownReactions){
+                if (r.answer.equals(reaction.answer)){
+                    reactionFound = true;
+                }
+            }
+            if (!ownQuestionlist.getQuestionRef(reaction.answer).allowMultipleReactions && reactionFound){
+                System.out.println("Feaction found");
+            }
+            else {
                 ownReactions.add(reaction);
-                System.out.println("Reaction added...");
+                LiveVoteActor.instance.tell(message, getSelf());
             }
 
-            LiveVoteActor.instance.tell(message, getSelf());
         } else if (message instanceof Reconnect) {
             Reconnect reconnect = (Reconnect) message;
             out = reconnect.out;
@@ -47,8 +53,5 @@ public class ParticipantActor extends UntypedActor {
             ownQuestionlist = sendActiveAndPost.questionlist;
             out.write(sendActiveAndPost.questionlist.toJson());
         }
-
-
     }
-
 }
