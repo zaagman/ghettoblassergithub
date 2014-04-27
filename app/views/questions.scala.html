@@ -1,8 +1,8 @@
-@main("Questions testpage"){<!--test-->} {
+@main("Questions testpage"){<link rel='stylesheet' href='@routes.Assets.at("stylesheets/questions.css")'>} {
 
 
 
-<div ng-app="questionsApp">
+<div ng-app="app">
     <div id="questionsPane" ng-controller="QuestionsController">
         <div ng-repeat="question in questions">
             <p>Question</p>
@@ -33,8 +33,12 @@
                 <button ng-click="removeQuestion(question)">remove question</button>
             </p>
         </div>
+        <p>
         <button ng-click="newQuestion()">new question</button>
+        </p>
+        <p>
         <button ng-click="addQuestionlist()">add questionlist</button>
+        </p>
         <p>
             {{questions}}
         </p>

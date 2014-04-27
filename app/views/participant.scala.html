@@ -1,9 +1,13 @@
 @import play.mvc.Http.Context.Implicit._
 
-@main("Participant Testpage"){<!--test-->} {
+@main("Participant Testpage"){
+
+<link rel="stylesheet" media="screen" href='@routes.Assets.at("stylesheets/publication.css")'>
+
+} {
 
 
-<div ng-app="participantApp">
+<div ng-app="app">
     <div id="participantPane" ng-controller="ParticipantController">
 
 
@@ -11,21 +15,27 @@
             var participantRoute = "@routes.ParticipantController.ws("").webSocketURL(request)";
         </script>
         <script type='text/javascript' src='@routes.Assets.at("javascripts/participant.min.js")'></script>
+        <script type="text/javascript" src='@routes.Assets.at("javascripts/answerbar.min.js")'></script>
 
-        <p>
-            Hello participant!!
-        </p>
         <div id="questions" ng-repeat="question in message.questions | filter: { status: 'ACTIVE' }">
             <div id="question">
-            <h2>{{question.questiontext}}</h2>
-            <table>
-                <tr ng-repeat="answer in question.answers">
-                    <td ng-if="question.allowMultipleReactions">{{answer.reactions}}</td>
-                    <td><a ng-click="sendReaction(answer)">{{answer.answertext}}</a></td>
-                </tr>
-            </table>
+                <h2>{{question.questiontext}}</h2>
+                <div ng-if="!question.reacted" id="answers">
+                    <div ng-repeat="answer in question.answers">
+                        <answer-bar answer="answer" ng-click="sendReaction(question, answer)"></answer-bar>
+                    </div>
+                </div>
+                <div ng-if="!question.allowMultipleReactions">
+                    <div ng-if="question.reacted">
+                        <p>You chose: <strong>{{question.reaction.answertext}}</strong></p>
+                    </div>
+                </div>
             </div>
+
         </div>
+
+
+
         <div id="questions" ng-repeat="question in message.questions | filter: { status: 'POST' }">
             <div ng-if="question.hasResult" id="result">
                 <h2>{{question.questiontext}}</h2>
@@ -35,12 +45,9 @@
             </div>
             <div ng-if="!question.hasResult" id="question">
             <h2>{{question.questiontext}}</h2>
-            <table>
-                <tr ng-repeat="answer in question.answers">
-                    <td ng-if="answer.allowMultipleReactions">{{answer.reactions}}</td>
-                    <td>{{answer.answertext}}</td>
-                </tr>
-            </table>
+                <div ng-repeat="answer in question.answers">
+                    <answer-bar answer="answer" ng-click="sendReaction(question, answer)"></answer-bar>
+                </div>
             </div>
 
         </div>

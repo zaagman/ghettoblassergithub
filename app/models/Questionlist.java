@@ -17,10 +17,6 @@ import java.util.ArrayList;
 //@Entity
 public class Questionlist /*extends Model*/ {
 
-//    @Id
-//    @GeneratedValue
-//    public long id;
-    public String user;
 //    @OneToMany (cascade = PERSIST)
     public ArrayList<Question> questions = new ArrayList<Question>();
 
@@ -51,7 +47,6 @@ public class Questionlist /*extends Model*/ {
 
     public static Questionlist getActiveAndPost(Questionlist questionlist){
         Questionlist list = new Questionlist();
-        list.user = questionlist.user;
         for(Question question : questionlist.questions){
             if (question.getStatus().equals(Question.StatusEnum.ACTIVE) || question.getStatus().equals(Question.StatusEnum.POST)){
                 list.questions.add(question);

@@ -1,6 +1,6 @@
-var questionsApp = angular.module('questionsApp', ['ngCookies']);
+var app = angular.module('app', ['ngCookies']);
 
-questionsApp.controller ('QuestionsController', function ($scope, $http, $cookieStore) {
+app.controller ('QuestionsController', function ($scope, $http, $cookieStore) {
     $scope.newQuestion = function () {
         if (!$scope.questions){
             $scope.questions = [];

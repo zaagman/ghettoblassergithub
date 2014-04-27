@@ -1,6 +1,6 @@
-var midicontrollerApp = angular.module('midicontrollerApp', ['ngCookies']);
+var app = angular.module('app', ['ngCookies']);
 
-midicontrollerApp.controller ('MidicontrollerController', function ($scope, $http, $cookieStore) {
+app.controller ('MidicontrollerController', function ($scope, $http, $cookieStore) {
 
     var midicontrollerID = $cookieStore.get('midicontrollerID')
 

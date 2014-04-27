@@ -5,35 +5,34 @@
 <head>
     <title>@title</title>
     <link rel='shortcut icon' type='image/png' href='@routes.Assets.at("images/favicon.png")'>
-    <link rel='stylesheet' href='@routes.Assets.at("stylesheets/index.css")'>
-    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+    <!--<link rel='stylesheet' href='@routes.Assets.at("stylesheets/index.css")'>-->
+    <!--<link rel="stylesheet" media="screen" href='@routes.Assets.at("stylesheets/main.css")'>-->
+    <!--<link rel="stylesheet" media="screen" href='@routes.Assets.at("stylesheets/publication.css")'>-->
+    <!--<link rel="stylesheet" media="screen" href='@routes.Assets.at("stylesheets/songVote.css")'>-->
+
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.3/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.3/angular-cookies.min.js"></script>
     <link rel='stylesheet' href='@routes.Assets.at("stylesheets/questions.css")'>
     <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("jquery.min.js"))'></script>
     <script type="text/javascript" src="@routes.MessageController.javascriptRoutes"></script>
-    <script src='http://cwilso.github.com/WebMIDIAPIShim/WebMIDIAPI.js'></script>
-
+    <script type="text/javascript" src='http://cwilso.github.com/WebMIDIAPIShim/WebMIDIAPI.js'></script>
+    <script type="text/javascript" src='http://d3js.org/d3.v3.min.js'></script>
     <!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.3/angular-route.min.js"></script>-->
     <script type='text/javascript' src='@routes.Assets.at("javascripts/midi.min.js")'></script>
     <script type='text/javascript' src='@routes.Assets.at("javascripts/questions.min.js")'></script>
-    <script type='text/javascript' src='@routes.Assets.at("javascripts/midi.min.js")'></script>
     <meta name="HandheldFriendly" content="true">
     <meta name="MobileOptimized" content="480">
     <meta name="viewport" content="width=480">
     @head
 </head>
 <body>
-    <div class="navbar navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container-fluid">
-                <a id="titleLink" class="brand" href="/">@title</a>
-            </div>
-        </div>
+<div id="wrapper">
+    <div id="logo">
+        <h1><a href="/">Ghettoblaster</a></h1>
     </div>
-    <div class="container">
+    <div id="content">
         @content
     </div>
-
+</div>
 </body>
 </html>

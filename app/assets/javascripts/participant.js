@@ -1,12 +1,14 @@
-var participantApp = angular.module('participantApp', ['ngCookies']);
+var app = angular.module('app', ['ngCookies', 'answer-bar-directive']);
 
-participantApp.controller ('ParticipantController', function ($scope, $http, $cookieStore) {
+app.controller ('ParticipantController', function ($scope, $http, $cookieStore) {
 
     var participantID = $cookieStore.get('participantID');
 
     var ws = new WebSocket(participantRoute + participantID);
     console.log(participantRoute + participantID);
     ws.onmessage = function (message) {
+        console.log(angular.fromJson(message.data));
+
         $scope.message = angular.fromJson(message.data);
 
 
@@ -18,7 +20,7 @@ participantApp.controller ('ParticipantController', function ($scope, $http, $co
         console.log($scope.message + "\n");
     };
 
-    $scope.sendReaction = function (answer){
+    $scope.sendReaction = function (question, answer){
         ws.send(angular.toJson(answer));
         console.log ("reaction sent: " + answer);
     }

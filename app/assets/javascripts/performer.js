@@ -1,10 +1,10 @@
-var performerApp = angular.module('performerApp', ['ngCookies']);
+var app = angular.module('app', ['ngCookies', 'answer-bar-directive']);
 
-performerApp.controller ('PerformerController', function ($scope, $http, $cookieStore) {
+app.controller ('PerformerController', function ($scope, $http, $cookieStore) {
 
     var performerID = $cookieStore.get('performerID');
     var ws = new WebSocket(performerRoute + performerID);
-    console.log(performerRoute + performerID);
+//    console.log(performerRoute + performerID);
     ws.onmessage = function (message) {
         $scope.message = angular.fromJson(message.data);
 
@@ -15,7 +15,7 @@ performerApp.controller ('PerformerController', function ($scope, $http, $cookie
 
 
 
-        console.log($scope.message);
+//        console.log($scope.message);
         $scope.$apply();
     };
 
@@ -25,6 +25,10 @@ performerApp.controller ('PerformerController', function ($scope, $http, $cookie
         }));
         console.log("sent start...");
     };
+
+    $scope.sendReaction = function (question, answer){
+        console.log ("reaction clicked: " + answer);
+    }
 
 });
 

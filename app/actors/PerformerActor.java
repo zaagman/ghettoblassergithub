@@ -2,6 +2,7 @@ package actors;
 
 import akka.actor.UntypedActor;
 import com.fasterxml.jackson.databind.JsonNode;
+import models.Questionlist;
 import play.mvc.WebSocket;
 import actors.LiveVoteActor.*;
 
@@ -27,11 +28,10 @@ public class PerformerActor extends UntypedActor {
             out = reconnect.out;
             LiveVoteActor.instance.tell(new AddPerformer(), getSelf());
         }
-        else if (message instanceof SendActiveAndPost){
-            SendActiveAndPost sendActiveAndPost = (SendActiveAndPost)message;
-            out.write(sendActiveAndPost.questionlist.toJson());
+        else if (message instanceof QuestionlistUpdated){
+            if (LiveVoteActor.questionlist != null) {
+                out.write(Questionlist.getActiveAndPost(LiveVoteActor.questionlist).toJson());
+            }
         }
-
-
     }
 }

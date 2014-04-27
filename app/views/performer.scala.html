@@ -1,32 +1,43 @@
 @import play.mvc.Http.Context.Implicit._
 
-@main("Performer Testpage"){<!--test-->} {
+@main("Performer Testpage"){
+<link rel="stylesheet" media="screen" href='@routes.Assets.at("stylesheets/publication.css")'>
+
+} {
 
 
-<div ng-app="performerApp">
+<div ng-app="app">
     <div id="performerPane" ng-controller="PerformerController">
 
         <script>
             var performerRoute = "@routes.PerformerController.ws("").webSocketURL(request)";
         </script>
         <script type='text/javascript' src='@routes.Assets.at("javascripts/performer.min.js")'></script>
-
+        <script type="text/javascript" src='@routes.Assets.at("javascripts/answerbar.min.js")'></script>
         <p>
             Hello Performer!
         </p>
         <div id="questions" ng-repeat="question in message.questions">
         <h1>{{question.questiontext}}</h1>
-        <table>
-            <tr ng-repeat="answer in question.answers">
-                <td>{{answer.reactions}}</td>
-                <td>{{answer.answertext}}</td>
-            </tr>
-        </table>
+            <div ng-if="question.hasResult" id="result">
+                <p>
+                    The result is: {{question.result.answertext}}
+                </p>
+            </div>
+            <div ng-if="!question.hasResult" id="question">
+                <div ng-repeat="answer in question.answers">
+                    <answer-bar answer="answer" ng-click="sendReaction(question, answer)"></answer-bar>
+                </div>
+            </div>
         </div>
         <p>
             <button ng-click="start()">Start!</button>
         </p>
-        <pre ng-model="log"> </pre>
+
+
+
+
+
 
     </div>
 </div>

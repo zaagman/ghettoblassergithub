@@ -22,7 +22,7 @@ public class LiveVoteActor extends UntypedActor {
     private final Set<ActorRef> participantSet = new HashSet<>();
     private final Set<ActorRef> midicontrollerSet = new HashSet<>();
 
-    private Questionlist questionlist = null;
+    public static Questionlist questionlist = null;
 
 
     Scheduler scheduler = new Scheduler(this.getSelf());
@@ -32,8 +32,8 @@ public class LiveVoteActor extends UntypedActor {
         if (message instanceof AddPerformer) {
             performerSet.add(getSender());
             if (questionlist != null) {
-                SendActiveAndPost activeAndPost = new SendActiveAndPost(Questionlist.getActiveAndPost(questionlist));
-                getSender().tell(activeAndPost, getSelf());
+                QuestionlistUpdated questionlistUpdated = new QuestionlistUpdated();
+                getSender().tell(questionlistUpdated, getSelf());
             }
             Logger.info("Add performer - (performers: " + performerSet.size() + ")");
         } else if (message instanceof RemovePerformer) {
@@ -42,8 +42,8 @@ public class LiveVoteActor extends UntypedActor {
         } else if (message instanceof AddMidicontroller) {
             midicontrollerSet.add(getSender());
             if (questionlist != null) {
-                SendActiveAndPost activeAndPost = new SendActiveAndPost(Questionlist.getActiveAndPost(questionlist));
-                getSender().tell(activeAndPost, getSelf());
+                QuestionlistUpdated questionlistUpdated = new QuestionlistUpdated();
+                getSender().tell(questionlistUpdated, getSelf());
             }
             Logger.info("Add midicontroller - (midicontrollers: " + midicontrollerSet.size() + ")");
         } else if (message instanceof RemoveMidicontroller) {
@@ -52,8 +52,7 @@ public class LiveVoteActor extends UntypedActor {
         } else if (message instanceof AddParticipant) {
             participantSet.add(getSender());
             if (questionlist != null) {
-                SendActiveAndPost activeAndPost = new SendActiveAndPost(Questionlist.getActiveAndPost(questionlist));
-                getSender().tell(activeAndPost, getSelf());
+                getSender().tell(new QuestionlistUpdated(), getSelf());
             }
             Logger.info("Add participant - (participants: " + participantSet.size() + ")");
         } else if (message instanceof RemoveParticipant) {
@@ -63,6 +62,8 @@ public class LiveVoteActor extends UntypedActor {
 
         else if (message instanceof Questionlist){
             questionlist = (Questionlist)message;
+            tellAll(new QuestionlistInitiated());
+            tellAll(new QuestionlistUpdated());
             System.out.println("Setting questionlist...");
         }
         else if (message instanceof Start) {
@@ -75,32 +76,32 @@ public class LiveVoteActor extends UntypedActor {
             System.out.println("Asking question...");
             AskQuestion askQuestion = (AskQuestion)message;
             askQuestion.question.setStatus(Question.StatusEnum.ACTIVE);
-            SendActiveAndPost activeAndPost = new SendActiveAndPost(Questionlist.getActiveAndPost(questionlist));
-            tellAll(activeAndPost);
+
+            tellAll(new QuestionlistUpdated());
         }
 
         else if (message instanceof SendResult) {
             SendResult sendResult = (SendResult) message;
             System.out.println("Sending Result...");
             sendResult.question.setStatus(Question.StatusEnum.POST);
-            SendActiveAndPost activeAndPost = new SendActiveAndPost(Questionlist.getActiveAndPost(questionlist));
+            QuestionlistUpdated questionlistUpdated = new QuestionlistUpdated();
 //            If there were no reactions send the first answer as result
             if (sendResult.question.result == null){
                 sendResult.question.addReaction(sendResult.question.answers.get(0));
             }
 //            Send question to operators
-            tellAll(activeAndPost);
+            tellAll(questionlistUpdated);
         }
         else if (message instanceof SendEnd) {
             SendEnd sendEnd = (SendEnd) message;
             System.out.println("Sending End...");
             sendEnd.question.setStatus(Question.StatusEnum.ENDED);
-            SendActiveAndPost activeAndPost = new SendActiveAndPost(Questionlist.getActiveAndPost(questionlist));
+            QuestionlistUpdated questionlistUpdated = new QuestionlistUpdated();
 //            If there were no reactions send the first answer as result
             if (sendEnd.question.result == null){
                 sendEnd.question.addReaction(sendEnd.question.answers.get(0));
             }
-            tellAll(activeAndPost);
+            tellAll(questionlistUpdated);
         }
 
         else if (message instanceof Reaction){
@@ -110,12 +111,13 @@ public class LiveVoteActor extends UntypedActor {
                 answer.addReaction();
             }
             tellMidicontrollers(new MidicontrollerActor.SendNote(answer.note));
-            SendActiveAndPost activeAndPost = new SendActiveAndPost(Questionlist.getActiveAndPost(questionlist));
+            QuestionlistUpdated questionlistUpdated = new QuestionlistUpdated();
             if (questionlist.getQuestionRef(reaction.answer).allowMultipleReactions){
-                tellAll(activeAndPost);
+                tellAll(questionlistUpdated);
             }
             else {
-                tellPerformers(activeAndPost);
+                tellPerformers(questionlistUpdated);
+                getSender().tell(questionlistUpdated, getSelf());
             }
         }
     }
@@ -192,13 +194,16 @@ public class LiveVoteActor extends UntypedActor {
         }
     }
 
-    public static class SendActiveAndPost {
-        final Questionlist questionlist;
+    public static class QuestionlistUpdated {
 
-        public SendActiveAndPost(Questionlist questionlist) {
-            this.questionlist = questionlist;
+        public QuestionlistUpdated() {
+
         }
 
+
+    }
+
+    public static class QuestionlistInitiated {
 
     }
 }
