@@ -85,6 +85,7 @@ public class LiveVoteActor extends UntypedActor {
             System.out.println("Sending Result...");
             sendResult.question.setStatus(Question.StatusEnum.POST);
             QuestionlistUpdated questionlistUpdated = new QuestionlistUpdated();
+            tellMidicontrollers(new MidicontrollerActor.SendNote(sendResult.question.result.note));
 //            If there were no reactions send the first answer as result
             if (sendResult.question.result == null){
                 sendResult.question.addReaction(sendResult.question.answers.get(0));
@@ -110,10 +111,11 @@ public class LiveVoteActor extends UntypedActor {
             if (answer != null) {
                 answer.addReaction();
             }
-            tellMidicontrollers(new MidicontrollerActor.SendNote(answer.note));
+
             QuestionlistUpdated questionlistUpdated = new QuestionlistUpdated();
             if (questionlist.getQuestionRef(reaction.answer).allowMultipleReactions){
                 tellAll(questionlistUpdated);
+                tellMidicontrollers(new MidicontrollerActor.SendNote(answer.note));
             }
             else {
                 tellPerformers(questionlistUpdated);
