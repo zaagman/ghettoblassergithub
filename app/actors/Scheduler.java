@@ -14,7 +14,6 @@ public class Scheduler {
 
 
     private ActorRef livevoteActor;
-
     public Scheduler(ActorRef actorRef){
         this.livevoteActor = actorRef;
     }

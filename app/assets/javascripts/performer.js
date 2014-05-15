@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ngCookies', 'answer-bar-directive']);
+var app = angular.module('app', ['ngCookies', 'answer-bar-directive', 'timer-directive']);
 
 app.controller ('PerformerController', function ($scope, $http, $cookieStore) {
 

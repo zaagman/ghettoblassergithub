@@ -68,6 +68,7 @@ public class LiveVoteActor extends UntypedActor {
         }
         else if (message instanceof Start) {
             if (questionlist != null){
+                getSelf().tell(questionlist, getSelf());
                 System.out.println("Scheduling questionlist...");
                 scheduler.scheduleQuestionlist(questionlist);
             }
