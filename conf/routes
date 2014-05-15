@@ -16,6 +16,7 @@ GET     /questions                  controllers.MainController.questions()
 POST    /addQuestionlist            controllers.MainController.addQuestionlist()
 
 GET     /                           controllers.ParticipantController.participant()
+GET     /participant                controllers.ParticipantController.participant()
 GET     /participantWs              controllers.ParticipantController.ws(participantID)
 
 
